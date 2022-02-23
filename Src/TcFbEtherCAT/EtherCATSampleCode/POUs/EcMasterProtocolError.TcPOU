@@ -1,0 +1,221 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.9">
+  <POU Name="EcMasterProtocolError" Id="{524c00f0-8a88-44a2-a6fb-3d2ba1f9f6ba}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK EcMasterProtocolError IMPLEMENTS IEcTask
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+	iState : INT;
+	masterProtocolErr : Tc2_EtherCAT.FB_EcGetLastProtErrInfo;
+	_execute: BOOL;
+	_done: BOOL;
+	_busy: BOOL;
+	_error: BOOL;
+	_netId: AMSNETID;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[CASE iState OF
+	0:
+		IF _execute THEN
+			_done := FALSE;
+			_busy := TRUE;
+			_error := FALSE;
+			masterProtocolErr.bExecute := TRUE;
+			IF masterProtocolErr.bBusy THEN
+				iState := 10;
+				_execute := false;
+			END_IF
+		END_IF
+	10:
+		IF NOT masterProtocolErr.bBusy THEN
+			IF NOT masterProtocolErr.bError THEN
+				_done := TRUE;
+			ELSE
+				_error := TRUE;
+			END_IF
+			_busy := FALSE;
+			masterProtocolErr.bExecute := FALSE;
+			iState := 0;
+		END_IF
+END_CASE
+
+masterProtocolErr(sNetId := Tc2_System.F_CreateAmsNetId(nIds := NetId));
+]]></ST>
+    </Implementation>
+    <Method Name="Abort" Id="{8ec4446a-8d45-4969-9dd2-5ba4f2d9caab}">
+      <Declaration><![CDATA[{warning 'add method implementation '}
+METHOD Abort : BOOL
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[masterProtocolErr.bExecute := FALSE;
+_busy := FALSE;
+_execute := FALSE;
+Abort := TRUE;
+iState := 0;]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="Busy" Id="{e5cefaca-c9a0-41a0-b3e8-81ea42f3144e}">
+      <Declaration><![CDATA[{warning 'add property implementation'}
+PROPERTY Busy : BOOL
+]]></Declaration>
+      <Get Name="Get" Id="{dcf3342c-b43b-4ead-87bb-ae8ac7bcdd07}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Busy := _busy;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="DeviceAddr" Id="{1fe96107-23d1-4b5f-88a7-ad0b59942e77}">
+      <Declaration><![CDATA[PROPERTY DeviceAddr : uint]]></Declaration>
+      <Get Name="Get" Id="{436c9308-645c-4c39-94f1-40e27366e4b9}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[DeviceAddr := masterProtocolErr.nSlaveAddr;]]></ST>
+        </Implementation>
+      </Get>
+      <Set Name="Set" Id="{81e3897f-c809-42cf-8734-22737817bc77}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[masterProtocolErr.nSlaveAddr := DeviceAddr;]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
+    <Property Name="Done" Id="{af1c7502-3456-43b4-a8b2-d7e4a828e042}">
+      <Declaration><![CDATA[{warning 'add property implementation'}
+PROPERTY Done : BOOL
+]]></Declaration>
+      <Get Name="Get" Id="{84f7f587-6f91-4f2a-8381-f97151a79748}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Done := _done;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="Error" Id="{f4aa0eb9-79e4-409b-b2e1-ac12ecdb9de9}">
+      <Declaration><![CDATA[{warning 'add property implementation'}
+PROPERTY Error : BOOL
+]]></Declaration>
+      <Get Name="Get" Id="{bd234570-99a0-4475-a923-7b015eea83ff}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Error := _error;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Method Name="Execute" Id="{62fd5f42-f783-4971-b219-17e2c65efc93}">
+      <Declaration><![CDATA[{warning 'add method implementation '}
+METHOD Execute : BOOL
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF NOT masterProtocolErr.bBusy THEN
+	Execute := _execute := TRUE;
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="LastProtocolError" Id="{97994ea7-26e7-4268-a85a-b58c1a4b746f}">
+      <Declaration><![CDATA[PROPERTY LastProtocolError : ST_EcLastProtErrInfo]]></Declaration>
+      <Get Name="Get" Id="{b632c0cb-a710-4c42-8add-3986abf7a4aa}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[LastProtocolError := masterProtocolErr.info;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="NetID" Id="{5deb011a-19dd-404b-be13-e964c030b2a7}">
+      <Declaration><![CDATA[{warning 'add property implementation'}
+PROPERTY NetID : amsnetid
+]]></Declaration>
+      <Get Name="Get" Id="{b400f4fb-8496-4e0f-ac88-82b48cd45add}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[NetID := _netId;]]></ST>
+        </Implementation>
+      </Get>
+      <Set Name="Set" Id="{5ea57270-e776-43cb-b3ca-37dd1ea79d51}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[_netId := NetID;]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
+    <Property Name="ProtocolType" Id="{43f17fdc-415f-48ab-9339-c61e728b4827}">
+      <Declaration><![CDATA[PROPERTY ProtocolType : E_EcMbxProtType]]></Declaration>
+      <Get Name="Get" Id="{fc7eb7bc-1cab-410a-ae7d-f7e843f8900b}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[ProtocolType := masterProtocolErr.eProtocol;]]></ST>
+        </Implementation>
+      </Get>
+      <Set Name="Set" Id="{fbfd0e40-586a-4862-8a6f-ec86006ff0d2}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[masterProtocolErr.eProtocol := ProtocolType;]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
+    <LineIds Name="EcMasterProtocolError">
+      <LineId Id="57" Count="25" />
+      <LineId Id="9" Count="0" />
+    </LineIds>
+    <LineIds Name="EcMasterProtocolError.Abort">
+      <LineId Id="5" Count="3" />
+      <LineId Id="4" Count="0" />
+    </LineIds>
+    <LineIds Name="EcMasterProtocolError.Busy.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="EcMasterProtocolError.DeviceAddr.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="EcMasterProtocolError.DeviceAddr.Set">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="EcMasterProtocolError.Done.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="EcMasterProtocolError.Error.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="EcMasterProtocolError.Execute">
+      <LineId Id="4" Count="2" />
+    </LineIds>
+    <LineIds Name="EcMasterProtocolError.LastProtocolError.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="EcMasterProtocolError.NetID.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="EcMasterProtocolError.NetID.Set">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="EcMasterProtocolError.ProtocolType.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="EcMasterProtocolError.ProtocolType.Set">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

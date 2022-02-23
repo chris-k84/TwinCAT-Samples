@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.9">
+  <DUT Name="StartType" Id="{e317a6fd-12cd-4b9e-965c-ef711c335a91}">
+    <Declaration><![CDATA[{attribute 'qualified_only'}
+{attribute 'strict'}
+TYPE StartType :
+(
+	Absolute := 1,
+	Relative := 2,
+	VeloPositive := 3,
+	VeloNegative := 4,
+	Calibrate := 24576 
+);
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

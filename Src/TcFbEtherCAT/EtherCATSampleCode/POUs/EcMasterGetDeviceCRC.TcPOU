@@ -1,0 +1,196 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.9">
+  <POU Name="EcMasterGetDeviceCRC" Id="{b134bf75-2d16-450b-90bf-d567390a3f26}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK EcMasterGetDeviceCRC IMPLEMENTS IEcTask
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+	iState : INT;
+	getDeviceCRC : Tc2_EtherCAT.FB_EcGetSlaveCrcErrorEx;
+	_execute: BOOL;
+	_done: BOOL;
+	_busy: BOOL;
+	_error: BOOL;
+	_netId: AMSNETID;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[CASE iState OF
+	0:
+		IF _execute THEN
+			_done := FALSE;
+			_busy := TRUE;
+			_error := FALSE;
+			getDeviceCRC.bExecute := TRUE;
+			IF getDeviceCRC.bBusy THEN
+				iState := 10;
+				_execute := false;
+			END_IF
+		END_IF
+	10:
+		IF NOT getDeviceCRC.bBusy THEN
+			IF NOT getDeviceCRC.bError THEN
+				_done := TRUE;
+			ELSE
+				_error := TRUE;
+			END_IF
+			_busy := FALSE;
+			getDeviceCRC.bExecute := FALSE;
+			iState := 0;
+		END_IF
+END_CASE
+
+getDeviceCRC(sNetId := Tc2_System.F_CreateAmsNetId(nIds := NetId));
+]]></ST>
+    </Implementation>
+    <Method Name="Abort" Id="{9233e0e0-5278-4efe-b24b-b972bfa1f7df}">
+      <Declaration><![CDATA[{warning 'add method implementation '}
+METHOD Abort : BOOL
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[getDeviceCRC.bExecute := FALSE;
+_busy := FALSE;
+_execute := FALSE;
+Abort := TRUE;
+iState := 0;]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="Busy" Id="{f4f81a6d-8453-4613-877f-6f383dc14282}">
+      <Declaration><![CDATA[{warning 'add property implementation'}
+PROPERTY Busy : BOOL
+]]></Declaration>
+      <Get Name="Get" Id="{4233078c-28d4-48dd-80b0-9e9ae2e15532}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Busy := _busy;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="DeviceAddr" Id="{7c2aaa9b-1551-4a8c-81d9-fe8515b143db}">
+      <Declaration><![CDATA[PROPERTY DeviceAddr : uint]]></Declaration>
+      <Get Name="Get" Id="{70a7ca5b-63de-4420-ba5d-759552805a5c}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[DeviceAddr := getDeviceCRC.nSlaveAddr;]]></ST>
+        </Implementation>
+      </Get>
+      <Set Name="Set" Id="{ecdd739f-4c51-4243-98e8-6a86c5ec1c29}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[getDeviceCRC.nSlaveAddr := DeviceAddr;]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
+    <Property Name="DeviceCRC" Id="{ee643b98-b9dd-4aa2-b240-e4e420bed4ed}">
+      <Declaration><![CDATA[PROPERTY DeviceCRC :  ST_EcCrcErrorEx]]></Declaration>
+      <Get Name="Get" Id="{e0288b1e-8e63-45a1-af06-cb7b43d00170}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[DeviceCRC := getDeviceCRC.crcError;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="Done" Id="{b2f7288b-191f-4b92-91fa-4a75f1639168}">
+      <Declaration><![CDATA[{warning 'add property implementation'}
+PROPERTY Done : BOOL
+]]></Declaration>
+      <Get Name="Get" Id="{d42635a3-eacc-40cf-8218-ec4a5e53bb76}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Done := _done;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="Error" Id="{f7351aba-5c87-4091-a30d-c6b267ffefef}">
+      <Declaration><![CDATA[{warning 'add property implementation'}
+PROPERTY Error : BOOL
+]]></Declaration>
+      <Get Name="Get" Id="{d9ab0c8b-d959-427a-ade3-227f59981d06}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Error := _error;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Method Name="Execute" Id="{0ca5408f-4c0d-48ef-be70-2414b2d2a7e3}">
+      <Declaration><![CDATA[{warning 'add method implementation '}
+METHOD Execute : BOOL
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF NOT getDeviceCRC.bBusy THEN
+	Execute := _execute := true;
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="NetID" Id="{f7479886-ad80-40ff-a160-c2333a320f11}">
+      <Declaration><![CDATA[{warning 'add property implementation'}
+PROPERTY NetID : amsnetid
+]]></Declaration>
+      <Get Name="Get" Id="{0883fade-120f-48ea-85ea-b6e101953aeb}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[NetID := _netId;]]></ST>
+        </Implementation>
+      </Get>
+      <Set Name="Set" Id="{186eb6ca-1018-4ce0-b385-460ff4c05f06}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[_netId := NetID;]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
+    <LineIds Name="EcMasterGetDeviceCRC">
+      <LineId Id="164" Count="25" />
+      <LineId Id="9" Count="0" />
+    </LineIds>
+    <LineIds Name="EcMasterGetDeviceCRC.Abort">
+      <LineId Id="5" Count="3" />
+      <LineId Id="4" Count="0" />
+    </LineIds>
+    <LineIds Name="EcMasterGetDeviceCRC.Busy.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="EcMasterGetDeviceCRC.DeviceAddr.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="EcMasterGetDeviceCRC.DeviceAddr.Set">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="EcMasterGetDeviceCRC.DeviceCRC.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="EcMasterGetDeviceCRC.Done.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="EcMasterGetDeviceCRC.Error.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="EcMasterGetDeviceCRC.Execute">
+      <LineId Id="4" Count="2" />
+    </LineIds>
+    <LineIds Name="EcMasterGetDeviceCRC.NetID.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="EcMasterGetDeviceCRC.NetID.Set">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

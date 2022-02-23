@@ -1,0 +1,191 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.9">
+  <POU Name="EcMasterConfDevices" Id="{bfb15777-5ac2-47f5-997a-05d929608a62}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK EcMasterConfDevices IMPLEMENTS IEcTask
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+	iState : INT;
+	masterConfDevices : Tc2_EtherCAT.FB_EcGetConfSlaves;
+	_confDevices : ARRAY[0..Tc2_EtherCAT.EC_MAX_SLAVES] OF Tc2_EtherCAT.ST_EcSlaveConfigData;
+	_execute: BOOL;
+	_done: BOOL;
+	_busy: BOOL;	
+	_error: BOOL;
+	_netId: AMSNETID;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[CASE iState OF
+	0:
+		IF _execute THEN
+			_done := FALSE;
+			_busy := TRUE;
+			_error := FALSE;
+			masterConfDevices.bExecute := TRUE;
+			IF masterConfDevices.bBusy THEN
+				iState := 10;
+				_execute := FALSE;
+			END_IF
+		END_IF
+	10:
+		IF NOT masterConfDevices.bBusy THEN
+			IF NOT masterConfDevices.bError THEN
+				_done := TRUE;
+			ELSE
+				_error := TRUE;
+			END_IF
+			_busy := FALSE;
+			masterConfDevices.bExecute := FALSE;
+			iState := 0;
+		END_IF
+END_CASE
+
+masterConfDevices(sNetId := Tc2_System.F_CreateAmsNetId(nIds := NetId), 
+					pArrEcConfSlaveInfo := ADR(_confDevices), 
+					cbBufLen := SIZEOF(_confDevices));
+]]></ST>
+    </Implementation>
+    <Method Name="Abort" Id="{7b340730-3588-40ad-a653-fa5775c54f50}">
+      <Declaration><![CDATA[{warning 'add method implementation '}
+METHOD Abort : BOOL
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[masterConfDevices.bExecute := FALSE;
+_busy := FALSE;
+_execute := FALSE;
+Abort := TRUE;
+iState := 0;]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="Busy" Id="{a4575f44-7364-49f4-9d7a-2ee9f4166947}">
+      <Declaration><![CDATA[{warning 'add property implementation'}
+PROPERTY Busy : BOOL
+]]></Declaration>
+      <Get Name="Get" Id="{1e725270-54ff-411c-a5e7-6193a67f91a4}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Busy := _busy;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="ConfiguredDevices" Id="{d7ab2219-abed-40ed-9b3e-2b1d3829f83e}">
+      <Declaration><![CDATA[PROPERTY ConfiguredDevices : reference to array[0..Ec_Max_slaves] of St_ecslaveconfigdata]]></Declaration>
+      <Get Name="Get" Id="{934f027a-85c7-41df-aff3-e6ccfc7af7fc}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[ConfiguredDevices REF= _confDevices;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="Done" Id="{bfcb367e-1477-4e86-8f1b-4e573c57198e}">
+      <Declaration><![CDATA[{warning 'add property implementation'}
+PROPERTY Done : BOOL
+]]></Declaration>
+      <Get Name="Get" Id="{39832905-f539-4b41-8360-65532f044f7b}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Done := _done;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="Error" Id="{dc845e02-a0f3-4212-8f21-6e6cd3c07990}">
+      <Declaration><![CDATA[{warning 'add property implementation'}
+PROPERTY Error : BOOL
+]]></Declaration>
+      <Get Name="Get" Id="{de8a3733-cfc4-4578-b02f-218ca6d7e370}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Error := _error;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Method Name="Execute" Id="{d9d7bf50-43f4-43f0-a288-bdc9c2669ecc}">
+      <Declaration><![CDATA[{warning 'add method implementation '}
+METHOD Execute : BOOL
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF NOT masterConfDevices.bBusy THEN
+	Execute := _execute := true;
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="NetID" Id="{383db7e8-627b-46f8-8f1d-f51ee527446c}">
+      <Declaration><![CDATA[{warning 'add property implementation'}
+PROPERTY NetID : amsnetid
+]]></Declaration>
+      <Get Name="Get" Id="{7aa91ba4-338a-4523-b1a5-11eacb7c732d}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[NetID := _netId;]]></ST>
+        </Implementation>
+      </Get>
+      <Set Name="Set" Id="{768d3337-4c06-4d35-8880-9f9d38f929b9}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[_netId := NetID;]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
+    <Property Name="NumberConfDevices" Id="{11f59a4d-6251-402e-9bb1-feed57c6b0b4}">
+      <Declaration><![CDATA[PROPERTY NumberConfDevices : udint]]></Declaration>
+      <Get Name="Get" Id="{172cc73d-5e90-4b62-80e2-80e65e56b1ff}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[NumberConfDevices := masterConfDevices.nSlaves;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <LineIds Name="EcMasterConfDevices">
+      <LineId Id="56" Count="8" />
+      <LineId Id="84" Count="0" />
+      <LineId Id="65" Count="15" />
+      <LineId Id="82" Count="1" />
+      <LineId Id="9" Count="0" />
+    </LineIds>
+    <LineIds Name="EcMasterConfDevices.Abort">
+      <LineId Id="5" Count="3" />
+      <LineId Id="4" Count="0" />
+    </LineIds>
+    <LineIds Name="EcMasterConfDevices.Busy.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="EcMasterConfDevices.ConfiguredDevices.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="EcMasterConfDevices.Done.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="EcMasterConfDevices.Error.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="EcMasterConfDevices.Execute">
+      <LineId Id="4" Count="2" />
+    </LineIds>
+    <LineIds Name="EcMasterConfDevices.NetID.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="EcMasterConfDevices.NetID.Set">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="EcMasterConfDevices.NumberConfDevices.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

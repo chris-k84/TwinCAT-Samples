@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.9">
+  <POU Name="DMC" Id="{27b72ce6-4866-4a8a-9fe4-f9730bfb2d86}" SpecialFunc="None">
+    <Declaration><![CDATA[PROGRAM DMC
+VAR
+	Enable : BOOL;
+	el7211 : EL72x1_DMC;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[IF Enable THEN
+	el7211.Enable();
+END_IF
+
+
+
+
+
+
+
+
+
+el7211();]]></ST>
+    </Implementation>
+    <LineIds Name="DMC">
+      <LineId Id="3" Count="11" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

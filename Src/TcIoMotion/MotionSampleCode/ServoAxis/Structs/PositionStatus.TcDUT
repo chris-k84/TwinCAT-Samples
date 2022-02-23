@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.9">
+  <DUT Name="PositionStatus" Id="{ecef35b4-e66a-4a08-8e39-d8be46d204a4}">
+    <Declaration><![CDATA[TYPE PositionStatus :
+STRUCT
+	Busy : BOOL;
+	InTarget : BOOL;
+	Warning : BOOL;
+	Error : BOOL;
+	Calibrated : BOOL;
+	Accelerate : BOOL;
+	Decelerate : BOOL;
+	ReadyToExecute : BOOL;
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

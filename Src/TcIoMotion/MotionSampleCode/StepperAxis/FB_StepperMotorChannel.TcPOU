@@ -1,0 +1,281 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.9">
+  <POU Name="FB_StepperMotorChannel" Id="{8dba2e1e-efa3-425a-8683-d8d3e6e0c375}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_StepperMotorChannel
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+	ENCStatus AT%I* : StepperENCStatus;
+	STMStatus AT%I* : StepperSTMStatus;
+	POSStatus AT%I* : StepperPOSStatus;
+	
+	ENCControl AT%Q* : StepperENCControl;
+	STMControl AT%Q* : StepperSTMControl;
+	POSControl AT%Q* : StepperPOSControl;
+	
+	_InTarget : BOOL;
+	
+	State :(
+		_00_mWait,
+        _01_mReset,
+        _02_mEnable,
+        _04_mJogFwd,
+        _05_mJogBwd,
+		_06_mGotoPosition,
+		_07_mStop,
+		_08_mSetPosition,
+		_09_RunAtExternalVelo,
+		_10_Disable);
+		
+	tonHoldHigh				: ton;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[CASE State OF
+        _00_mWait : 
+			;
+        _01_mReset : 
+			STMControl.Reset := TRUE;
+			tonHoldHigh(in := TRUE, pt := T#500MS);
+			IF tonHoldHigh.Q THEN
+				STMControl.Reset := FALSE;
+				IF STMStatus.Error = FALSE AND
+					STMStatus.Warning = FALSE AND
+					STMStatus.Ready = TRUE
+				THEN
+					State := _00_mWait;
+					tonHoldHigh(in := FALSE, pt := T#500MS);
+				END_IF
+			END_IF
+			
+        _02_mEnable : 
+			IF STMStatus.Error THEN				
+				State := _01_mReset;
+			ELSE
+				STMControl.Enable := TRUE;			
+			END_IF
+
+        _04_mJogFwd : 
+			POSControl.Velocity := _MotorParams.rJogSpeed;
+        _05_mJogBwd : 
+			POSControl.Velocity := _MotorParams.rJogSpeed;
+			
+		_06_mGotoPosition :
+			POSControl.Execute := TRUE;
+			_InTarget := FALSE;
+			IF POSStatus.InTarget THEN
+				State := _02_mEnable;
+				POSControl.Execute := FALSE;
+				_InTarget := TRUE;
+			END_IF
+			
+		_07_mStop : 
+			POSControl.Execute := FALSE;
+			IF POSStatus.ReadyToExecute THEN	
+				State := _02_mEnable;
+			END_IF
+			
+		_08_mSetPosition :
+			POSControl.Execute := TRUE;
+			
+			IF POSStatus.Calibrated THEN
+				POSControl.Execute := FALSE;
+				State := _02_mEnable;
+			END_IF
+			
+		_09_RunAtExternalVelo :
+			POSControl.Execute := TRUE;
+			_InTarget := false;
+			
+		_10_Disable:
+			STMControl.Enable := FALSE;
+			State := _00_mWait;
+		
+			
+END_CASE]]></ST>
+    </Implementation>
+    <Property Name="ActualPosition" Id="{e3fd5802-8896-4525-8631-f5b3196112be}">
+      <Declaration><![CDATA[PROPERTY ActualPosition : lreal]]></Declaration>
+      <Get Name="Get" Id="{45da7488-4b5c-4824-83e6-ad8e7a921449}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[ActualPosition := UDINT_TO_LREAL( POSStatus.ActualPosition)/8062.72;
+]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="ActualVelocity" Id="{39f8e4a8-2a6e-44b9-a7fb-5cc3247407b4}">
+      <Declaration><![CDATA[PROPERTY ActualVelocity : int]]></Declaration>
+      <Get Name="Get" Id="{806c6fd8-5fc9-4c17-9bee-237bb2443294}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[ActualVelocity := POSStatus.ActualVelocity;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Method Name="CalibrateMotor" Id="{869d3233-f21b-441a-9699-57c4eebac93e}">
+      <Declaration><![CDATA[METHOD CalibrateMotor : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF State = _02_mEnable THEN
+	State := _08_mSetPosition;
+	//POSControl.Velocity := REAL_TO_INT( Velocity*252);
+	POSControl.StartType := StartType.Calibrate;
+	//POSControl.TargetPosition := LREAL_TO_UDINT(Position*8062.72);
+	//POSControl.TargetPosition := LREAL_TO_UDINT(Position*10);
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Disable" Id="{1be03c52-faf0-4da1-a0b2-99dc1a59ccd4}">
+      <Declaration><![CDATA[METHOD Disable : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF STMStatus.Ready THEN
+	State := _10_Disable;
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Enable" Id="{7e2d5fb7-ad9e-4739-a736-c7dd9855344c}">
+      <Declaration><![CDATA[METHOD Enable : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF STMStatus.ReadyToEnable THEN
+	State := _02_mEnable;
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="GoToPosition" Id="{0a3d70c7-ae77-4ef7-8b45-807a35d4fe22}">
+      <Declaration><![CDATA[METHOD GoToPosition : BOOL
+VAR_INPUT
+	Position : LREAL;
+	Velocity : REAL;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF State = _02_mEnable THEN
+	State := _06_mGoToPosition;
+	POSControl.Velocity := REAL_TO_INT( Velocity*252);
+	POSControl.StartType := StartType.Absolute;
+	POSControl.TargetPosition := LREAL_TO_UDINT(Position*8062.72);
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="InTarget" Id="{1a0bd8d2-1200-4f18-9394-803a8831fce4}">
+      <Declaration><![CDATA[PROPERTY InTarget : bool]]></Declaration>
+      <Get Name="Get" Id="{a2eca4b5-b96c-4ff4-b68a-669cb9837a01}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[InTarget := _InTarget;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Method Name="MoveAtVelocity" Id="{b6daaa03-5be8-4a6b-b2d4-103b287da30a}">
+      <Declaration><![CDATA[METHOD MoveAtVelocity : BOOL
+VAR_INPUT
+	Velocity : REAL;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF State = _02_mEnable THEN
+	State := _09_RunAtExternalVelo;
+	POSControl.Velocity := REAL_TO_INT( Velocity*252);
+	POSControl.StartType := StartType.VeloPositive;
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="Ready" Id="{bb0cd970-a59e-4064-a89b-f79082fe5f77}">
+      <Declaration><![CDATA[PROPERTY Ready : bool]]></Declaration>
+      <Get Name="Get" Id="{92b6bcad-3049-41c5-b54d-52bb02cb7445}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Ready := STMStatus.Ready;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Method Name="Reset" Id="{bc8ab3f0-f3f7-4857-b8b2-6bb111ef1733}">
+      <Declaration><![CDATA[METHOD Reset : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF STMStatus.Error OR STMStatus.Warning OR POSStatus.Error THEN
+	State := _01_mReset;
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Stop" Id="{a2ec7f6f-8707-48d8-8908-bb705b2f2285}">
+      <Declaration><![CDATA[METHOD Stop : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF POSControl.Execute THEN
+	State  := _07_mStop;
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <LineIds Name="FB_StepperMotorChannel">
+      <LineId Id="93" Count="38" />
+      <LineId Id="185" Count="0" />
+      <LineId Id="133" Count="20" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_StepperMotorChannel.ActualPosition.Get">
+      <LineId Id="3" Count="0" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_StepperMotorChannel.ActualVelocity.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_StepperMotorChannel.CalibrateMotor">
+      <LineId Id="3" Count="5" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_StepperMotorChannel.Disable">
+      <LineId Id="3" Count="1" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_StepperMotorChannel.Enable">
+      <LineId Id="3" Count="1" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_StepperMotorChannel.GoToPosition">
+      <LineId Id="3" Count="4" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_StepperMotorChannel.InTarget.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_StepperMotorChannel.MoveAtVelocity">
+      <LineId Id="3" Count="3" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_StepperMotorChannel.Ready.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_StepperMotorChannel.Reset">
+      <LineId Id="3" Count="1" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_StepperMotorChannel.Stop">
+      <LineId Id="3" Count="1" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

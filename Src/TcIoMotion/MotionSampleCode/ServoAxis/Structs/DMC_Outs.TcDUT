@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.9">
+  <DUT Name="DMC_Outs" Id="{53d3317e-e70d-4196-8aa1-0bde071a19c1}">
+    <Declaration><![CDATA[TYPE DMC_Outs :
+STRUCT
+	DMC_DrvOuts : DriveOutputs;
+	DMC_Drv_Ctrl : DriveControl;
+	DMC_POS_Ctrl : PositioningControl;
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

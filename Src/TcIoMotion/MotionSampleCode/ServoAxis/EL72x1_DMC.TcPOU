@@ -1,0 +1,237 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.9">
+  <POU Name="EL72x1_DMC" Id="{5d7a0ba8-888d-479f-99c5-25bd7d6d845a}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK EL72x1_DMC
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+	//Properties
+	_acceleration : UINT := 4000; 	//default to 4s accel
+	_deceleration : UINT := 4000;	//default to 4s decel
+	_startType : UINT := 1; 		//default to abs moves
+	_scale : REAL := 360; 			//default to 360 degree scale factor
+	
+	//Locals
+	dmc_inputs AT%I* : DMC_Ins;
+	dmc_outputs AT%q* : DMC_Outs;
+	xMove: BOOL;
+	iMove: INT;
+	
+	posDemand : REAL;
+	currentPos : REAL;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[MoveSequence();
+
+dmc_outputs.DMC_DrvOuts.TargetPosition := REAL_TO_UDINT(posDemand * (1048576/360));
+currentPos := UDINT_TO_REAL( dmc_inputs.DMC_Inputs.ActualPosition)*(360.0/1048576.0);
+]]></ST>
+    </Implementation>
+    <Property Name="Acceleration" Id="{0f489025-7d66-4b39-8820-723a22fd0dc7}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Acceleration : uint]]></Declaration>
+      <Get Name="Get" Id="{8d8d8e4e-1dd6-42ed-965b-623973f9ecb6}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Acceleration := _acceleration;]]></ST>
+        </Implementation>
+      </Get>
+      <Set Name="Set" Id="{10052c2f-e003-4a0a-9fbc-e4a0bcc611ca}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[_acceleration := Acceleration;]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
+    <Property Name="Deceleration" Id="{4c65d767-dd9c-4b66-8970-767316944559}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Deceleration : uint]]></Declaration>
+      <Get Name="Get" Id="{08331d35-7b36-4dec-8f1c-7df4ae7b9476}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Deceleration := _deceleration;]]></ST>
+        </Implementation>
+      </Get>
+      <Set Name="Set" Id="{e313fc1e-0f34-408c-8d2a-98f5fb58defb}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[_deceleration := Deceleration;]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
+    <Method Name="Enable" Id="{3e7b7545-0028-4626-8ed8-9f5042b5ff68}">
+      <Declaration><![CDATA[METHOD PUBLIC Enable : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF dmc_inputs.DMC_Drv_Status.ReadyToEnable THEN
+	dmc_outputs.DMC_Drv_Ctrl.Enable := TRUE;
+END_IF
+]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="Enabled" Id="{e8331ba0-e7ef-4ea0-b2e5-be04bf4e43f1}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Enabled : bool]]></Declaration>
+      <Get Name="Get" Id="{c719c9f7-93a2-43d8-a292-341fc754ab8b}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Enabled := dmc_inputs.DMC_Drv_Status.Ready AND dmc_inputs.DMC_POS_Status.ReadyToExecute;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="Error" Id="{5b09fc6d-ff5b-47fe-a5cb-3a624411a0d5}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Error : bool]]></Declaration>
+      <Get Name="Get" Id="{272c0756-e2fe-4fc8-876b-a614711307f4}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Error := dmc_inputs.DMC_Drv_Status.Error;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Method Name="MoveAxis" Id="{e4fb2b63-faf3-42a6-9470-f798dcffe77f}">
+      <Declaration><![CDATA[METHOD PUBLIC MoveAxis : BOOL
+VAR_INPUT
+	PositioningControl : real;
+	Velocity : INT;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[dmc_outputs.DMC_DrvOuts.TargetPosition := REAL_TO_UDINT(PositioningControl*(1048576/_scale));
+dmc_outputs.DMC_DrvOuts.TargetVelocity := Velocity;
+dmc_outputs.DMC_DrvOuts.StartType := _startType;
+dmc_outputs.DMC_DrvOuts.TargetAcceleration := _acceleration;
+dmc_outputs.DMC_DrvOuts.TargetDeceleration := _deceleration;
+xMove := TRUE;
+MoveAxis := TRUE;
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="MoveSequence" Id="{35f8abeb-e88f-43b1-8480-fa08e614a561}">
+      <Declaration><![CDATA[METHOD PRIVATE MoveSequence : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[CASE iMove OF 
+	0: 
+		IF dmc_inputs.DMC_POS_Status.ReadyToExecute AND xMove THEN
+			xMove := FALSE;
+			iMove := 10;
+		END_IF
+	10:
+		dmc_outputs.DMC_POS_Ctrl.Execute := TRUE;
+		IF dmc_inputs.DMC_POS_Status.Busy THEN
+			iMove := 20;
+		END_IF
+	20:
+		IF NOT dmc_inputs.DMC_POS_Status.Busy THEN
+			IF dmc_inputs.DMC_POS_Status.InTarget THEN
+				iMove := 0;
+			ELSE
+				iMove :=99;
+			END_IF
+			dmc_outputs.DMC_POS_Ctrl.Execute := FALSE;
+		END_IF
+END_CASE
+]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="Scale" Id="{e75115b2-c129-4232-a701-3301b1398b5d}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Scale : real]]></Declaration>
+      <Get Name="Get" Id="{698f0f1c-a8e7-4bed-9992-4fa56eeb8d19}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Scale := _scale;]]></ST>
+        </Implementation>
+      </Get>
+      <Set Name="Set" Id="{c8f37d03-d4a0-44de-9559-bed6432fa9f3}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[_scale := Scale;]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
+    <Property Name="StartType" Id="{7e2cf6ed-c7f3-4a23-bfb6-dbb9aa440449}">
+      <Declaration><![CDATA[PROPERTY PUBLIC StartType : uint]]></Declaration>
+      <Get Name="Get" Id="{5fb5db65-0608-4b42-ab84-bd34f014a280}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[StartType := _startType;]]></ST>
+        </Implementation>
+      </Get>
+      <Set Name="Set" Id="{1d2f504a-5036-487e-a5ea-4229b3174833}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[_startType := StartType;]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
+    <LineIds Name="EL72x1_DMC">
+      <LineId Id="3" Count="3" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="EL72x1_DMC.Acceleration.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="EL72x1_DMC.Acceleration.Set">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="EL72x1_DMC.Deceleration.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="EL72x1_DMC.Deceleration.Set">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="EL72x1_DMC.Enable">
+      <LineId Id="3" Count="2" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="EL72x1_DMC.Enabled.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="EL72x1_DMC.Error.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="EL72x1_DMC.MoveAxis">
+      <LineId Id="3" Count="6" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="EL72x1_DMC.MoveSequence">
+      <LineId Id="3" Count="20" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="EL72x1_DMC.Scale.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="EL72x1_DMC.Scale.Set">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="EL72x1_DMC.StartType.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="EL72x1_DMC.StartType.Set">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>
