@@ -20,6 +20,27 @@
     <Compile Include="RollerAxis\EP7402CH1.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="RollerAxis\Structs\DInputs.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="RollerAxis\Structs\DOutputs.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="RollerAxis\Structs\STMControl.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="RollerAxis\Structs\STMInfoData.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="RollerAxis\Structs\STMInputDevice.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="RollerAxis\Structs\STMStatus.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="RollerAxis\Structs\STMTargetVelocity.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="StepperAxis\FB_StepperMotorChannel.TcPOU">
       <SubType>Code</SubType>
     </Compile>
@@ -42,9 +63,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="StepperAxis\Structs\StepperSTMStatus.TcDUT">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="ServoAxis\DMC.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="ServoAxis\EL72x1_DMC.TcPOU">
@@ -84,6 +102,7 @@
   <ItemGroup>
     <Folder Include="DUTs" />
     <Folder Include="RollerAxis" />
+    <Folder Include="RollerAxis\Structs" />
     <Folder Include="StepperAxis\Structs" />
     <Folder Include="ServoAxis" />
     <Folder Include="ServoAxis\Structs" />
@@ -130,8 +149,8 @@
   <ProjectExtensions>
     <PlcProjectOptions>
       <XmlArchive>
-  <Data>
-    <o xml:space="preserve" t="OptionKey">
+        <Data>
+          <o xml:space="preserve" t="OptionKey">
       <v n="Name">"&lt;ProjectRoot&gt;"</v>
       <d n="SubKeys" t="Hashtable" ckt="String" cvt="OptionKey">
         <v>{192FAD59-8248-4824-A8DE-9177C94C195A}</v>
@@ -158,13 +177,13 @@
       </d>
       <d n="Values" t="Hashtable" />
     </o>
-  </Data>
-  <TypeList>
-    <Type n="Hashtable">System.Collections.Hashtable</Type>
-    <Type n="OptionKey">{54dd0eac-a6d8-46f2-8c27-2f43c7e49861}</Type>
-    <Type n="String">System.String</Type>
-  </TypeList>
-</XmlArchive>
+        </Data>
+        <TypeList>
+          <Type n="Hashtable">System.Collections.Hashtable</Type>
+          <Type n="OptionKey">{54dd0eac-a6d8-46f2-8c27-2f43c7e49861}</Type>
+          <Type n="String">System.String</Type>
+        </TypeList>
+      </XmlArchive>
     </PlcProjectOptions>
   </ProjectExtensions>
 </Project>

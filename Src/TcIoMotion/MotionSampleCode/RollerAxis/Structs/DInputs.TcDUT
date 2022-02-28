@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.9">
+  <DUT Name="DInputs" Id="{ac2dec9d-7e66-40c0-87d0-adee01247e0a}">
+    <Declaration><![CDATA[TYPE DInputs :
+STRUCT
+	input1 : BOOL;
+	input2 : BOOL;
+	input3 : BOOL;
+	input4 : BOOL;
+	controlInput1 : BOOL;
+	controlInput2 : BOOL;
+	controlInput3 : BOOL;
+	controlInput4 : BOOL;
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>
