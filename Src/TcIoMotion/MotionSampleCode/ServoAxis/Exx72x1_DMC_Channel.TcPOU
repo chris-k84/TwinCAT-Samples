@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.9">
-  <POU Name="EL72x1_DMC" Id="{5d7a0ba8-888d-479f-99c5-25bd7d6d845a}" SpecialFunc="None">
-    <Declaration><![CDATA[FUNCTION_BLOCK EL72x1_DMC
+  <POU Name="Exx72x1_DMC_Channel" Id="{5d7a0ba8-888d-479f-99c5-25bd7d6d845a}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK Exx72x1_DMC_Channel
 VAR_INPUT
 END_VAR
 VAR_OUTPUT
@@ -187,50 +187,50 @@ END_VAR
         </Implementation>
       </Set>
     </Property>
-    <LineIds Name="EL72x1_DMC">
+    <LineIds Name="Exx72x1_DMC_Channel">
       <LineId Id="3" Count="3" />
       <LineId Id="2" Count="0" />
     </LineIds>
-    <LineIds Name="EL72x1_DMC.Acceleration.Get">
+    <LineIds Name="Exx72x1_DMC_Channel.Acceleration.Get">
       <LineId Id="2" Count="0" />
     </LineIds>
-    <LineIds Name="EL72x1_DMC.Acceleration.Set">
+    <LineIds Name="Exx72x1_DMC_Channel.Acceleration.Set">
       <LineId Id="2" Count="0" />
     </LineIds>
-    <LineIds Name="EL72x1_DMC.Deceleration.Get">
+    <LineIds Name="Exx72x1_DMC_Channel.Deceleration.Get">
       <LineId Id="2" Count="0" />
     </LineIds>
-    <LineIds Name="EL72x1_DMC.Deceleration.Set">
+    <LineIds Name="Exx72x1_DMC_Channel.Deceleration.Set">
       <LineId Id="2" Count="0" />
     </LineIds>
-    <LineIds Name="EL72x1_DMC.Enable">
+    <LineIds Name="Exx72x1_DMC_Channel.Enable">
       <LineId Id="3" Count="2" />
       <LineId Id="2" Count="0" />
     </LineIds>
-    <LineIds Name="EL72x1_DMC.Enabled.Get">
+    <LineIds Name="Exx72x1_DMC_Channel.Enabled.Get">
       <LineId Id="2" Count="0" />
     </LineIds>
-    <LineIds Name="EL72x1_DMC.Error.Get">
+    <LineIds Name="Exx72x1_DMC_Channel.Error.Get">
       <LineId Id="2" Count="0" />
     </LineIds>
-    <LineIds Name="EL72x1_DMC.MoveAxis">
+    <LineIds Name="Exx72x1_DMC_Channel.MoveAxis">
       <LineId Id="3" Count="6" />
       <LineId Id="2" Count="0" />
     </LineIds>
-    <LineIds Name="EL72x1_DMC.MoveSequence">
+    <LineIds Name="Exx72x1_DMC_Channel.MoveSequence">
       <LineId Id="3" Count="20" />
       <LineId Id="2" Count="0" />
     </LineIds>
-    <LineIds Name="EL72x1_DMC.Scale.Get">
+    <LineIds Name="Exx72x1_DMC_Channel.Scale.Get">
       <LineId Id="2" Count="0" />
     </LineIds>
-    <LineIds Name="EL72x1_DMC.Scale.Set">
+    <LineIds Name="Exx72x1_DMC_Channel.Scale.Set">
       <LineId Id="2" Count="0" />
     </LineIds>
-    <LineIds Name="EL72x1_DMC.StartType.Get">
+    <LineIds Name="Exx72x1_DMC_Channel.StartType.Get">
       <LineId Id="2" Count="0" />
     </LineIds>
-    <LineIds Name="EL72x1_DMC.StartType.Set">
+    <LineIds Name="Exx72x1_DMC_Channel.StartType.Set">
       <LineId Id="2" Count="0" />
     </LineIds>
   </POU>

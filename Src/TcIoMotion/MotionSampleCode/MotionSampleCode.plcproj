@@ -17,7 +17,7 @@
     <LibraryReferences>{055070b4-0237-49ba-a099-0d92f117472d}</LibraryReferences>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="RollerAxis\EP7402CH1.TcPOU">
+    <Compile Include="RollerAxis\EP7402_0xxx_Channel.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="RollerAxis\Structs\DInputs.TcDUT">
@@ -41,7 +41,7 @@
     <Compile Include="RollerAxis\Structs\STMTargetVelocity.TcDUT">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="StepperAxis\FB_StepperMotorChannel.TcPOU">
+    <Compile Include="StepperAxis\Ex70x7_DMC_Channel.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="StepperAxis\Structs\StartType.TcDUT">
@@ -65,7 +65,7 @@
     <Compile Include="StepperAxis\Structs\StepperSTMStatus.TcDUT">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="ServoAxis\EL72x1_DMC.TcPOU">
+    <Compile Include="ServoAxis\Exx72x1_DMC_Channel.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="ServoAxis\Structs\DMC_Ins.TcDUT">
@@ -126,31 +126,36 @@
     </PlaceholderReference>
   </ItemGroup>
   <ItemGroup>
-    <SubObject Include="EL72x1_DMC.Acceleration" />
-    <SubObject Include="EL72x1_DMC.Acceleration.Get" />
-    <SubObject Include="EL72x1_DMC.Acceleration.Set" />
-    <SubObject Include="EL72x1_DMC.Deceleration" />
-    <SubObject Include="EL72x1_DMC.Deceleration.Get" />
-    <SubObject Include="EL72x1_DMC.Deceleration.Set" />
-    <SubObject Include="EL72x1_DMC.Enable" />
-    <SubObject Include="EL72x1_DMC.Enabled" />
-    <SubObject Include="EL72x1_DMC.Enabled.Get" />
-    <SubObject Include="EL72x1_DMC.Error" />
-    <SubObject Include="EL72x1_DMC.Error.Get" />
-    <SubObject Include="EL72x1_DMC.MoveAxis" />
-    <SubObject Include="EL72x1_DMC.MoveSequence" />
-    <SubObject Include="EL72x1_DMC.Scale" />
-    <SubObject Include="EL72x1_DMC.Scale.Get" />
-    <SubObject Include="EL72x1_DMC.Scale.Set" />
-    <SubObject Include="EL72x1_DMC.StartType" />
-    <SubObject Include="EL72x1_DMC.StartType.Get" />
-    <SubObject Include="EL72x1_DMC.StartType.Set" />
+    <SubObject Include="Exx72x1_DMC_Channel.Acceleration" />
+    <SubObject Include="Exx72x1_DMC_Channel.Acceleration.Get" />
+    <SubObject Include="Exx72x1_DMC_Channel.Acceleration.Set" />
+    <SubObject Include="Exx72x1_DMC_Channel.Deceleration" />
+    <SubObject Include="Exx72x1_DMC_Channel.Deceleration.Get" />
+    <SubObject Include="Exx72x1_DMC_Channel.Deceleration.Set" />
+    <SubObject Include="Exx72x1_DMC_Channel.Enable" />
+    <SubObject Include="Exx72x1_DMC_Channel.Enabled" />
+    <SubObject Include="Exx72x1_DMC_Channel.Enabled.Get" />
+    <SubObject Include="Exx72x1_DMC_Channel.Error" />
+    <SubObject Include="Exx72x1_DMC_Channel.Error.Get" />
+    <SubObject Include="Exx72x1_DMC_Channel.MoveAxis" />
+    <SubObject Include="Exx72x1_DMC_Channel.MoveSequence" />
+    <SubObject Include="Exx72x1_DMC_Channel.Scale" />
+    <SubObject Include="Exx72x1_DMC_Channel.Scale.Get" />
+    <SubObject Include="Exx72x1_DMC_Channel.Scale.Set" />
+    <SubObject Include="Exx72x1_DMC_Channel.StartType" />
+    <SubObject Include="Exx72x1_DMC_Channel.StartType.Get" />
+    <SubObject Include="Exx72x1_DMC_Channel.StartType.Set" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="MotionSampleCode.tmc">
+      <SubType>Content</SubType>
+    </None>
   </ItemGroup>
   <ProjectExtensions>
     <PlcProjectOptions>
       <XmlArchive>
-        <Data>
-          <o xml:space="preserve" t="OptionKey">
+  <Data>
+    <o xml:space="preserve" t="OptionKey">
       <v n="Name">"&lt;ProjectRoot&gt;"</v>
       <d n="SubKeys" t="Hashtable" ckt="String" cvt="OptionKey">
         <v>{192FAD59-8248-4824-A8DE-9177C94C195A}</v>
@@ -158,6 +163,34 @@
           <v n="Name">"{192FAD59-8248-4824-A8DE-9177C94C195A}"</v>
           <d n="SubKeys" t="Hashtable" />
           <d n="Values" t="Hashtable" />
+        </o>
+        <v>{29BD8D0C-3586-4548-BB48-497B9A01693F}</v>
+        <o>
+          <v n="Name">"{29BD8D0C-3586-4548-BB48-497B9A01693F}"</v>
+          <d n="SubKeys" t="Hashtable" ckt="String" cvt="OptionKey">
+            <v>NamingConventions</v>
+            <o>
+              <v n="Name">"NamingConventions"</v>
+              <d n="SubKeys" t="Hashtable" />
+              <d n="Values" t="Hashtable" />
+            </o>
+            <v>Metrics</v>
+            <o>
+              <v n="Name">"Metrics"</v>
+              <d n="SubKeys" t="Hashtable" />
+              <d n="Values" t="Hashtable" />
+            </o>
+            <v>Rules</v>
+            <o>
+              <v n="Name">"Rules"</v>
+              <d n="SubKeys" t="Hashtable" />
+              <d n="Values" t="Hashtable" />
+            </o>
+          </d>
+          <d n="Values" t="Hashtable" ckt="String" cvt="Boolean">
+            <v>PerformStaticAnalyse</v>
+            <v>False</v>
+          </d>
         </o>
         <v>{8F99A816-E488-41E4-9FA3-846536012284}</v>
         <o>
@@ -177,13 +210,14 @@
       </d>
       <d n="Values" t="Hashtable" />
     </o>
-        </Data>
-        <TypeList>
-          <Type n="Hashtable">System.Collections.Hashtable</Type>
-          <Type n="OptionKey">{54dd0eac-a6d8-46f2-8c27-2f43c7e49861}</Type>
-          <Type n="String">System.String</Type>
-        </TypeList>
-      </XmlArchive>
+  </Data>
+  <TypeList>
+    <Type n="Boolean">System.Boolean</Type>
+    <Type n="Hashtable">System.Collections.Hashtable</Type>
+    <Type n="OptionKey">{54dd0eac-a6d8-46f2-8c27-2f43c7e49861}</Type>
+    <Type n="String">System.String</Type>
+  </TypeList>
+</XmlArchive>
     </PlcProjectOptions>
   </ProjectExtensions>
 </Project>

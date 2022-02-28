@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.9">
-  <POU Name="FB_StepperMotorChannel" Id="{8dba2e1e-efa3-425a-8683-d8d3e6e0c375}" SpecialFunc="None">
-    <Declaration><![CDATA[FUNCTION_BLOCK FB_StepperMotorChannel
+  <POU Name="Ex70x7_DMC_Channel" Id="{8dba2e1e-efa3-425a-8683-d8d3e6e0c375}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK Ex70x7_DMC_Channel
 VAR_INPUT
 END_VAR
 VAR_OUTPUT
@@ -21,8 +21,6 @@ VAR
 		_00_mWait,
         _01_mReset,
         _02_mEnable,
-        _04_mJogFwd,
-        _05_mJogBwd,
 		_06_mGotoPosition,
 		_07_mStop,
 		_08_mSetPosition,
@@ -56,11 +54,6 @@ END_VAR
 			ELSE
 				STMControl.Enable := TRUE;			
 			END_IF
-
-        _04_mJogFwd : 
-			POSControl.Velocity := _MotorParams.rJogSpeed;
-        _05_mJogBwd : 
-			POSControl.Velocity := _MotorParams.rJogSpeed;
 			
 		_06_mGotoPosition :
 			POSControl.Execute := TRUE;
@@ -230,50 +223,51 @@ END_VAR
 END_IF]]></ST>
       </Implementation>
     </Method>
-    <LineIds Name="FB_StepperMotorChannel">
-      <LineId Id="93" Count="38" />
+    <LineIds Name="Ex70x7_DMC_Channel">
+      <LineId Id="93" Count="22" />
+      <LineId Id="121" Count="10" />
       <LineId Id="185" Count="0" />
       <LineId Id="133" Count="20" />
       <LineId Id="2" Count="0" />
     </LineIds>
-    <LineIds Name="FB_StepperMotorChannel.ActualPosition.Get">
+    <LineIds Name="Ex70x7_DMC_Channel.ActualPosition.Get">
       <LineId Id="3" Count="0" />
       <LineId Id="2" Count="0" />
     </LineIds>
-    <LineIds Name="FB_StepperMotorChannel.ActualVelocity.Get">
+    <LineIds Name="Ex70x7_DMC_Channel.ActualVelocity.Get">
       <LineId Id="2" Count="0" />
     </LineIds>
-    <LineIds Name="FB_StepperMotorChannel.CalibrateMotor">
+    <LineIds Name="Ex70x7_DMC_Channel.CalibrateMotor">
       <LineId Id="3" Count="5" />
       <LineId Id="2" Count="0" />
     </LineIds>
-    <LineIds Name="FB_StepperMotorChannel.Disable">
+    <LineIds Name="Ex70x7_DMC_Channel.Disable">
       <LineId Id="3" Count="1" />
       <LineId Id="2" Count="0" />
     </LineIds>
-    <LineIds Name="FB_StepperMotorChannel.Enable">
+    <LineIds Name="Ex70x7_DMC_Channel.Enable">
       <LineId Id="3" Count="1" />
       <LineId Id="2" Count="0" />
     </LineIds>
-    <LineIds Name="FB_StepperMotorChannel.GoToPosition">
+    <LineIds Name="Ex70x7_DMC_Channel.GoToPosition">
       <LineId Id="3" Count="4" />
       <LineId Id="2" Count="0" />
     </LineIds>
-    <LineIds Name="FB_StepperMotorChannel.InTarget.Get">
+    <LineIds Name="Ex70x7_DMC_Channel.InTarget.Get">
       <LineId Id="2" Count="0" />
     </LineIds>
-    <LineIds Name="FB_StepperMotorChannel.MoveAtVelocity">
+    <LineIds Name="Ex70x7_DMC_Channel.MoveAtVelocity">
       <LineId Id="3" Count="3" />
       <LineId Id="2" Count="0" />
     </LineIds>
-    <LineIds Name="FB_StepperMotorChannel.Ready.Get">
+    <LineIds Name="Ex70x7_DMC_Channel.Ready.Get">
       <LineId Id="2" Count="0" />
     </LineIds>
-    <LineIds Name="FB_StepperMotorChannel.Reset">
+    <LineIds Name="Ex70x7_DMC_Channel.Reset">
       <LineId Id="3" Count="1" />
       <LineId Id="2" Count="0" />
     </LineIds>
-    <LineIds Name="FB_StepperMotorChannel.Stop">
+    <LineIds Name="Ex70x7_DMC_Channel.Stop">
       <LineId Id="3" Count="1" />
       <LineId Id="2" Count="0" />
     </LineIds>
