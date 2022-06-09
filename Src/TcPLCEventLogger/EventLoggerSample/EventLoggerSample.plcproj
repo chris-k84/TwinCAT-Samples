@@ -17,10 +17,10 @@
     <LibraryReferences>{e5c9b952-389c-454f-a357-2ea5201352ad}</LibraryReferences>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="EventLoggerClass\EventLoggerClass.TcPOU">
+    <Compile Include="EventLoggerClass\ITcMessage_Ext.TcIO">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="EventLoggerClass\IEventLogger.TcIO">
+    <Compile Include="EventLoggerClass\TcMessage_Ext.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="PlcTask.TcTTO">
@@ -32,8 +32,8 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="DUTs" />
-    <Folder Include="GVLs" />
     <Folder Include="EventLoggerClass" />
+    <Folder Include="GVLs" />
     <Folder Include="VISUs" />
     <Folder Include="POUs" />
   </ItemGroup>
@@ -59,9 +59,6 @@
     <None Include="EventLoggerSample.tmc">
       <SubType>Content</SubType>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <SubObject Include="EventLoggerClass.Send" />
   </ItemGroup>
   <ProjectExtensions>
     <PlcProjectOptions>
