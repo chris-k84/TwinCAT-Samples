@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
+  <DUT Name="StepperSTMControl" Id="{088d4595-d08e-4f88-af28-e4c50a5451e6}">
+    <Declaration><![CDATA[TYPE StepperSTMControl :
+STRUCT
+	Enable : BOOL;
+	Reset : BOOL;
+	ReduceTorque : BOOL;
+	DigitalOutput1 : BOOL;
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

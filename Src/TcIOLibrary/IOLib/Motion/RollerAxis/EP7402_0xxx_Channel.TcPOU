@@ -1,0 +1,227 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
+  <POU Name="EP7402_0xxx_Channel" Id="{f521fb78-fbb1-4295-9843-293ba46d01be}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK EP7402_0xxx_Channel
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+	DI_Inputs AT%I* : DInputs;
+	DO_Outputs AT%Q* : DOutputs;
+	STM_Control AT%Q* : STMControl;
+	STM_Info_data AT%I* : STMInfoData;
+	STM_Input_Device AT%I* : STMInputDevice;
+	STM_Status AT%I* : STMStatus;
+	STM_Target_Velocity AT%Q* : STMTargetVelocity;
+	
+	_acceleration : UINT := 100;
+	_deceleration : UINT := 100;
+	
+	State :(
+		_00_mWait,
+        _01_mReset,
+        _02_mEnable,
+		_03_mStop,
+		_04_RunAtVelo,
+		_05_mDisable);
+		
+	tonHoldHigh	: ton;
+		
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[CASE State OF
+        _00_mWait : 
+			;
+        _01_mReset : 
+			STM_Control.reset := TRUE;
+			tonHoldHigh(in := TRUE, pt := T#500MS);
+			IF tonHoldHigh.Q THEN
+				STM_Control.reset := FALSE;
+				IF STM_Status.error = FALSE AND
+					STM_Status.warning = FALSE AND
+					STM_Status.ready = TRUE
+				THEN
+					State := _00_mWait;
+					tonHoldHigh(in := FALSE);
+				END_IF
+			END_IF
+			
+        _02_mEnable : 
+			IF STM_Status.error THEN				
+				State := _01_mReset;
+			ELSE
+				STM_Control.enable := TRUE;			
+			END_IF
+
+			
+		_04_RunAtVelo :
+			;
+			
+		_03_mStop : 
+			STM_Target_Velocity.velocity := 0;
+			IF STM_Status.ready THEN	
+				State := _02_mEnable;
+			END_IF
+			
+		_05_mDisable:
+			STM_Control.enable := FALSE;
+			State := _00_mWait;
+		
+			
+END_CASE]]></ST>
+    </Implementation>
+    <Property Name="Acceleration" Id="{4698a692-8660-4d45-9a6e-cbc52ae93cd4}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Acceleration : uint]]></Declaration>
+      <Get Name="Get" Id="{5d791b17-0a32-42f0-aa98-2737ff9ff011}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Acceleration := _acceleration;]]></ST>
+        </Implementation>
+      </Get>
+      <Set Name="Set" Id="{16f303fc-4cf4-4e31-a766-cc137f3b7fed}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[_acceleration := Acceleration;]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
+    <Property Name="Deceleration" Id="{4ccd9b3a-bc01-4656-a061-debae52701bc}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Deceleration : uint]]></Declaration>
+      <Get Name="Get" Id="{42f87727-a68b-4137-bcb7-3ba74c34b490}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Deceleration := _deceleration;]]></ST>
+        </Implementation>
+      </Get>
+      <Set Name="Set" Id="{14305335-d873-4adc-9944-5b8a0e321989}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[_deceleration := Deceleration;]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
+    <Method Name="Disable" Id="{6cc94d2d-6735-4787-85c7-b81a543c3f49}">
+      <Declaration><![CDATA[METHOD Disable : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF STM_Status.ready THEN
+	State := _05_mDisable;
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Enable" Id="{607a0934-616c-4c45-a258-18fe2a2cc9f0}">
+      <Declaration><![CDATA[METHOD Enable : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF STM_Status.readyToEnable THEN
+	State := _02_mEnable;
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="MoveNeg" Id="{91384ce3-1c75-4756-8f20-a1faf0df51f4}">
+      <Declaration><![CDATA[METHOD MoveNeg : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[STM_Control.invertDirection := TRUE;
+STM_Target_Velocity.velocity := 6000;
+STM_Target_Velocity.acceleration := _acceleration;
+STM_Target_Velocity.deceleration := _deceleration;
+State := _04_RunAtVelo;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="MovePos" Id="{3e5533e3-af9d-4171-b9de-75b303523ca1}">
+      <Declaration><![CDATA[METHOD MovePos : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[STM_Control.invertDirection := FALSE;
+STM_Target_Velocity.velocity := 6000;
+STM_Target_Velocity.acceleration := _acceleration;
+STM_Target_Velocity.deceleration := _deceleration;
+State := _04_RunAtVelo;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Reset" Id="{bae56175-30c7-4713-adcc-8f798f2c92cc}">
+      <Declaration><![CDATA[METHOD Reset : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF STM_Status.error OR STM_Status.warning THEN
+	State := _01_mReset;
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Stop" Id="{ce0c68c5-5c46-418b-b4ca-2e0ea944c74a}">
+      <Declaration><![CDATA[METHOD Stop : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF STM_Status.movingNegative OR STM_Status.movingPositive THEN
+	State := _03_mStop;
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <LineIds Name="EP7402_0xxx_Channel">
+      <LineId Id="39" Count="22" />
+      <LineId Id="66" Count="2" />
+      <LineId Id="75" Count="6" />
+      <LineId Id="94" Count="5" />
+      <LineId Id="9" Count="0" />
+    </LineIds>
+    <LineIds Name="EP7402_0xxx_Channel.Acceleration.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="EP7402_0xxx_Channel.Acceleration.Set">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="EP7402_0xxx_Channel.Deceleration.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="EP7402_0xxx_Channel.Deceleration.Set">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="EP7402_0xxx_Channel.Disable">
+      <LineId Id="5" Count="0" />
+      <LineId Id="9" Count="1" />
+    </LineIds>
+    <LineIds Name="EP7402_0xxx_Channel.Enable">
+      <LineId Id="9" Count="2" />
+    </LineIds>
+    <LineIds Name="EP7402_0xxx_Channel.MoveNeg">
+      <LineId Id="6" Count="0" />
+      <LineId Id="5" Count="0" />
+      <LineId Id="10" Count="2" />
+    </LineIds>
+    <LineIds Name="EP7402_0xxx_Channel.MovePos">
+      <LineId Id="9" Count="0" />
+      <LineId Id="5" Count="0" />
+      <LineId Id="11" Count="1" />
+      <LineId Id="10" Count="0" />
+    </LineIds>
+    <LineIds Name="EP7402_0xxx_Channel.Reset">
+      <LineId Id="6" Count="2" />
+    </LineIds>
+    <LineIds Name="EP7402_0xxx_Channel.Stop">
+      <LineId Id="9" Count="2" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

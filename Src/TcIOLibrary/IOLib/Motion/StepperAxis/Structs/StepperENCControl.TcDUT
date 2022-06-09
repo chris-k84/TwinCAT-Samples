@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
+  <DUT Name="StepperENCControl" Id="{04beb992-82dd-493e-a415-57a65a5d4fec}">
+    <Declaration><![CDATA[TYPE StepperENCControl :
+STRUCT
+	EnableLatchC : BOOL;
+	EnableLatchPositiveEdge : BOOL;
+	SetCounter : BOOL;
+	EnableLatchNegativeEdge : BOOL;
+	SetCounterValue : UDINT;
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

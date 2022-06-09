@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
+  <DUT Name="StepperENCStatus" Id="{7f8a7551-d880-4bba-99e5-bac298844416}">
+    <Declaration><![CDATA[TYPE StepperENCStatus :
+STRUCT
+	LatchCValid : BOOL;
+	LatchExternalValid : BOOL;
+	SetCounterDone : BOOL;
+	CounterUnderflow : BOOL;
+	CounterOverflow : BOOL;
+	ExtrapolationStall : BOOL;
+	StatusInputA : BOOL;
+	StatusInputB : BOOL;
+	StatusInputC : BOOL;
+	StatusExternLatch : BOOL;
+	SyncError : BOOL;
+	TxPDOToggle : BOOL;
+	CounterValue : UDINT;
+	LatchValue : UDINT;
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
+  <DUT Name="DriveStatus" Id="{c79d0e04-3606-438b-a8bf-2e6ccf7eb7eb}">
+    <Declaration><![CDATA[TYPE DriveStatus :
+STRUCT
+	ReadyToEnable : BOOL;
+	Ready : BOOL;
+	Warning : BOOL;
+	Error : BOOL;
+	MovingPositive : BOOL;
+	MovingNegative : BOOL;
+	DigitalInput1 : BOOL;
+	DigitalInput2 : BOOL;
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

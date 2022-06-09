@@ -1,0 +1,173 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
+  <POU Name="EcMasterState" Id="{ef384593-949d-4c61-ac5d-9d61d5f7da48}" SpecialFunc="None">
+    <Declaration><![CDATA[{attribute 'hide_all_locals'}
+FUNCTION_BLOCK EcMasterState IMPLEMENTS IEcTask
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+	iState : INT;
+	getMasterState : Tc2_EtherCAT.FB_EcGetMasterState;
+	_execute: BOOL;
+	_done: BOOL;
+	_busy: BOOL;
+	_error: BOOL;
+	
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[CASE iState OF
+	0:
+		IF _execute THEN
+			_done := FALSE;
+			_busy := TRUE;
+			_error := FALSE;
+			getMasterState.bExecute := TRUE;
+			IF getMasterState.bBusy THEN
+				iState := 10;
+				_execute := false;
+			END_IF
+		END_IF
+	10:
+		IF NOT getMasterState.bBusy THEN
+			IF NOT getMasterState.bError THEN
+				_done := TRUE;
+			ELSE
+				_error := TRUE;
+			END_IF
+			_busy := FALSE;
+			getMasterState.bExecute := FALSE;
+			iState := 0;
+		END_IF
+END_CASE
+
+getMasterState(sNetId := Tc2_System.F_CreateAmsNetId(nIds := NetId));
+]]></ST>
+    </Implementation>
+    <Method Name="Abort" Id="{4f4ec416-af94-4ab8-9775-26b9a3387c96}">
+      <Declaration><![CDATA[{warning 'add method implementation '}
+METHOD Abort : BOOL
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[getMasterState.bExecute := FALSE;
+_busy := FALSE;
+_execute := FALSE;
+Abort := TRUE;
+iState := 0;]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="Busy" Id="{1cec5511-2858-4838-8152-4387d456d178}">
+      <Declaration><![CDATA[{warning 'add property implementation'}
+PROPERTY Busy : BOOL
+]]></Declaration>
+      <Get Name="Get" Id="{e2b298a0-a295-4108-86bf-b2c44501aeef}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Busy := _busy;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="Done" Id="{15c44b1a-6c4d-4002-b9fe-b934a4930288}">
+      <Declaration><![CDATA[{warning 'add property implementation'}
+PROPERTY Done : BOOL
+]]></Declaration>
+      <Get Name="Get" Id="{e387a6e6-e2ca-41a8-927a-e93bdb0048cd}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Done := _done;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="Error" Id="{8938a9c7-3783-4f4e-8546-89b2c5e7a371}">
+      <Declaration><![CDATA[{warning 'add property implementation'}
+PROPERTY Error : BOOL
+]]></Declaration>
+      <Get Name="Get" Id="{f78edfec-6bd7-4d0c-9fe8-3b25cbd0489e}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Error := _error;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Method Name="Execute" Id="{186e64ba-299f-494a-b06f-f17ee195b571}">
+      <Declaration><![CDATA[{warning 'add method implementation '}
+METHOD Execute : BOOL
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF NOT getMasterState.bBusy THEN
+	Execute := _execute := TRUE;
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="MasterState" Id="{50b71598-0b36-46b3-9f2a-70ad9f34d0b9}">
+      <Declaration><![CDATA[PROPERTY MasterState : word]]></Declaration>
+      <Get Name="Get" Id="{2db7ede0-f4e3-49c1-9e19-a96436f2e37d}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[MasterState := getMasterState.state;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="NetID" Id="{7861d366-02a0-4d17-802f-b29462c665a7}">
+      <Declaration><![CDATA[{warning 'add property implementation'}
+PROPERTY NetID : amsnetid
+]]></Declaration>
+      <Get Name="Get" Id="{8f349f08-304d-45b0-9aaf-0ed2c68dfee0}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[NetID := _netId;]]></ST>
+        </Implementation>
+      </Get>
+      <Set Name="Set" Id="{5928a872-5729-497c-8b11-2434db5e4526}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[_netId := NetID;]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
+    <LineIds Name="EcMasterState">
+      <LineId Id="137" Count="25" />
+      <LineId Id="9" Count="0" />
+    </LineIds>
+    <LineIds Name="EcMasterState.Abort">
+      <LineId Id="5" Count="3" />
+      <LineId Id="4" Count="0" />
+    </LineIds>
+    <LineIds Name="EcMasterState.Busy.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="EcMasterState.Done.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="EcMasterState.Error.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="EcMasterState.Execute">
+      <LineId Id="5" Count="1" />
+      <LineId Id="4" Count="0" />
+    </LineIds>
+    <LineIds Name="EcMasterState.MasterState.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="EcMasterState.NetID.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="EcMasterState.NetID.Set">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

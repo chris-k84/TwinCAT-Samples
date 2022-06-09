@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
+  <DUT Name="STMControl" Id="{6ee1c34f-904d-4152-8be8-5a5be716230a}">
+    <Declaration><![CDATA[TYPE STMControl :
+STRUCT
+	enable : BOOL;
+	reset : BOOL;
+	invertDirection : BOOL;
+	brakeOutput : BOOL;
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

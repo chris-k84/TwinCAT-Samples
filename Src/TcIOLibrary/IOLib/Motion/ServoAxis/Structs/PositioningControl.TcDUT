@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
+  <DUT Name="PositioningControl" Id="{29284844-ea0e-4aa1-ab50-ccd902667bc2}">
+    <Declaration><![CDATA[TYPE PositioningControl :
+STRUCT
+	Execute : BOOL;
+	EmergencyStop : BOOL;
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

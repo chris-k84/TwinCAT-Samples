@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
+  <DUT Name="StepperSTMStatus" Id="{d3b18cb1-2743-4f07-aded-b82200d35e6d}">
+    <Declaration><![CDATA[TYPE StepperSTMStatus :
+STRUCT
+	ReadyToEnable : BOOL;
+	Ready : BOOL;
+	Warning : BOOL;
+	Error : BOOL;
+	MovingPositive : BOOL;
+	MovingNegative : BOOL;
+	MotorStall : BOOL;
+	DigitalInput1 : BOOL;
+	DigitalInput2 : BOOL;
+	SyncError : BOOL;
+	TxPDOToggle : BOOL;
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

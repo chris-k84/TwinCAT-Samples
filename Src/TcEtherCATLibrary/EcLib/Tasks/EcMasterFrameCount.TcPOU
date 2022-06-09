@@ -1,0 +1,173 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
+  <POU Name="EcMasterFrameCount" Id="{09a697d0-71d0-4f6f-825d-38ffff5f388e}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK EcMasterFrameCount IMPLEMENTS IEcTask
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+	iState : INT;
+	masterFrameCount : Tc2_EtherCAT.FB_EcMasterFrameCount;
+	_execute: BOOL;
+	_done: BOOL;
+	_busy: BOOL;
+	_error: BOOL;
+	_netId: AMSNETID;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[CASE iState OF
+	0:
+		IF _execute THEN
+			_done := FALSE;
+			_busy := TRUE;
+			_error := FALSE;
+			masterFrameCount.bExecute := TRUE;
+			IF masterFrameCount.bBusy THEN
+				iState := 10;
+				_execute := false;
+			END_IF
+		END_IF
+	10:
+		IF NOT masterFrameCount.bBusy THEN
+			IF NOT masterFrameCount.bError THEN
+				_done := TRUE;
+			ELSE
+				_error := TRUE;
+			END_IF
+			_busy := FALSE;
+			masterFrameCount.bExecute := FALSE;
+			iState := 0;
+		END_IF
+END_CASE
+
+masterFrameCount(sNetId := Tc2_System.F_CreateAmsNetId(nIds := NetId));
+]]></ST>
+    </Implementation>
+    <Method Name="Abort" Id="{179768aa-7ee5-4432-82cc-810ed053a4fd}">
+      <Declaration><![CDATA[{warning 'add method implementation '}
+METHOD Abort : BOOL
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[masterFrameCount.bExecute := FALSE;
+_busy := FALSE;
+_execute := FALSE;
+Abort := TRUE;
+iState := 0;]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="Busy" Id="{4bfe5642-a7d0-419f-802d-2bd3a9224c56}">
+      <Declaration><![CDATA[{warning 'add property implementation'}
+PROPERTY Busy : BOOL
+]]></Declaration>
+      <Get Name="Get" Id="{c52382f8-0c4b-4390-a4a9-09a6f79c4179}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Busy := _busy;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="Done" Id="{3f07a710-3d2b-4135-ad6e-83a189d921f7}">
+      <Declaration><![CDATA[{warning 'add property implementation'}
+PROPERTY Done : BOOL
+]]></Declaration>
+      <Get Name="Get" Id="{ff8561af-359e-455f-a02e-e0802c8faf50}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Done := _done;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="Error" Id="{413ba544-2d3c-43a8-b0af-54c895f8b9d5}">
+      <Declaration><![CDATA[{warning 'add property implementation'}
+PROPERTY Error : BOOL
+]]></Declaration>
+      <Get Name="Get" Id="{74b39f58-dbdf-4c83-a937-eef82c5c05f0}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Error := _error;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Method Name="Execute" Id="{26056fc7-fae5-424d-932e-bfcd5fef20bf}">
+      <Declaration><![CDATA[{warning 'add method implementation '}
+METHOD Execute : BOOL
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF NOT masterFrameCount.bBusy THEN
+	Execute := _execute := True;
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="FrameNumber" Id="{1e6cc324-b1e2-48fe-8bc3-cad1d8d6fcc2}">
+      <Declaration><![CDATA[PROPERTY FrameNumber : UDINT]]></Declaration>
+      <Get Name="Get" Id="{b8642ee9-420d-4204-9f0b-64a05d48ab2c}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[FrameNumber := masterFrameCount.nFrames;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="NetID" Id="{5fb037c1-f58d-429e-964d-eb51ee36ad6a}">
+      <Declaration><![CDATA[{warning 'add property implementation'}
+PROPERTY NetID : amsnetid
+]]></Declaration>
+      <Get Name="Get" Id="{ff6245ce-7869-45f7-9aa3-7f8199871515}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[NetID := _netId;]]></ST>
+        </Implementation>
+      </Get>
+      <Set Name="Set" Id="{6b315a97-ec91-4486-94eb-6bc7d8cddc7e}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[_netId := NetID;]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
+    <LineIds Name="EcMasterFrameCount">
+      <LineId Id="62" Count="8" />
+      <LineId Id="87" Count="0" />
+      <LineId Id="71" Count="15" />
+      <LineId Id="9" Count="0" />
+    </LineIds>
+    <LineIds Name="EcMasterFrameCount.Abort">
+      <LineId Id="5" Count="3" />
+      <LineId Id="4" Count="0" />
+    </LineIds>
+    <LineIds Name="EcMasterFrameCount.Busy.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="EcMasterFrameCount.Done.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="EcMasterFrameCount.Error.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="EcMasterFrameCount.Execute">
+      <LineId Id="4" Count="2" />
+    </LineIds>
+    <LineIds Name="EcMasterFrameCount.FrameNumber.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="EcMasterFrameCount.NetID.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="EcMasterFrameCount.NetID.Set">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

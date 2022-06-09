@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<TcSmProject xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.beckhoff.com/schemas/2012/07/TcSmProject" TcSmVersion="1.0" TcVersion="3.1.4024.29">
+	<Project ProjectGUID="{48BAB073-7CFC-492B-B5A2-D6BBD732CF62}" Target64Bit="true" ShowHideConfigurations="#x106">
+		<Plc>
+			<Project GUID="{F0C37FA4-3701-4207-A20A-E21DABA353E6}" Name="IOLib" PrjFilePath="IOLib\IOLib.plcproj" TmcFilePath="IOLib\IOLib.tmc" ReloadTmc="true" AmsPort="851" FileArchiveSettings="#x000e"/>
+		</Plc>
+	</Project>
+</TcSmProject>

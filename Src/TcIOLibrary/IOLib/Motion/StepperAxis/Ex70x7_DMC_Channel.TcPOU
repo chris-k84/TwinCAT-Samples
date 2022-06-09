@@ -1,0 +1,275 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
+  <POU Name="Ex70x7_DMC_Channel" Id="{165026ab-25d1-406b-8c2e-dceb74646d34}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK Ex70x7_DMC_Channel
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+	ENCStatus AT%I* : StepperENCStatus;
+	STMStatus AT%I* : StepperSTMStatus;
+	POSStatus AT%I* : StepperPOSStatus;
+	
+	ENCControl AT%Q* : StepperENCControl;
+	STMControl AT%Q* : StepperSTMControl;
+	POSControl AT%Q* : StepperPOSControl;
+	
+	_InTarget : BOOL;
+	
+	State :(
+		_00_mWait,
+        _01_mReset,
+        _02_mEnable,
+		_06_mGotoPosition,
+		_07_mStop,
+		_08_mSetPosition,
+		_09_RunAtExternalVelo,
+		_10_Disable);
+		
+	tonHoldHigh				: ton;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[CASE State OF
+        _00_mWait : 
+			;
+        _01_mReset : 
+			STMControl.Reset := TRUE;
+			tonHoldHigh(in := TRUE, pt := T#500MS);
+			IF tonHoldHigh.Q THEN
+				STMControl.Reset := FALSE;
+				IF STMStatus.Error = FALSE AND
+					STMStatus.Warning = FALSE AND
+					STMStatus.Ready = TRUE
+				THEN
+					State := _00_mWait;
+					tonHoldHigh(in := FALSE, pt := T#500MS);
+				END_IF
+			END_IF
+			
+        _02_mEnable : 
+			IF STMStatus.Error THEN				
+				State := _01_mReset;
+			ELSE
+				STMControl.Enable := TRUE;			
+			END_IF
+			
+		_06_mGotoPosition :
+			POSControl.Execute := TRUE;
+			_InTarget := FALSE;
+			IF POSStatus.InTarget THEN
+				State := _02_mEnable;
+				POSControl.Execute := FALSE;
+				_InTarget := TRUE;
+			END_IF
+			
+		_07_mStop : 
+			POSControl.Execute := FALSE;
+			IF POSStatus.ReadyToExecute THEN	
+				State := _02_mEnable;
+			END_IF
+			
+		_08_mSetPosition :
+			POSControl.Execute := TRUE;
+			
+			IF POSStatus.Calibrated THEN
+				POSControl.Execute := FALSE;
+				State := _02_mEnable;
+			END_IF
+			
+		_09_RunAtExternalVelo :
+			POSControl.Execute := TRUE;
+			_InTarget := false;
+			
+		_10_Disable:
+			STMControl.Enable := FALSE;
+			State := _00_mWait;
+		
+			
+END_CASE]]></ST>
+    </Implementation>
+    <Property Name="ActualPosition" Id="{87402dda-3934-4e72-a117-2fd73b8f7cfc}">
+      <Declaration><![CDATA[PROPERTY ActualPosition : lreal]]></Declaration>
+      <Get Name="Get" Id="{9e3576a2-691e-4a64-8b2c-f8318dfb70e0}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[ActualPosition := UDINT_TO_LREAL( POSStatus.ActualPosition)/8062.72;
+]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="ActualVelocity" Id="{e6b14254-e519-45f2-8f01-a31ccc3b9831}">
+      <Declaration><![CDATA[PROPERTY ActualVelocity : int]]></Declaration>
+      <Get Name="Get" Id="{87355008-d361-4495-a8e1-ec6ab95b56e2}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[ActualVelocity := POSStatus.ActualVelocity;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Method Name="CalibrateMotor" Id="{66ad0482-651d-4769-959d-9a03b9363113}">
+      <Declaration><![CDATA[METHOD CalibrateMotor : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF State = _02_mEnable THEN
+	State := _08_mSetPosition;
+	//POSControl.Velocity := REAL_TO_INT( Velocity*252);
+	POSControl.StartType := StartType.Calibrate;
+	//POSControl.TargetPosition := LREAL_TO_UDINT(Position*8062.72);
+	//POSControl.TargetPosition := LREAL_TO_UDINT(Position*10);
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Disable" Id="{b3eb0936-8c9c-40c1-98cc-33098a295206}">
+      <Declaration><![CDATA[METHOD Disable : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF STMStatus.Ready THEN
+	State := _10_Disable;
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Enable" Id="{1a8f71be-b4c5-43c0-8b97-fbf99520c81a}">
+      <Declaration><![CDATA[METHOD Enable : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF STMStatus.ReadyToEnable THEN
+	State := _02_mEnable;
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="GoToPosition" Id="{e811e2fb-700f-45d5-986c-8b7c09a4b4bd}">
+      <Declaration><![CDATA[METHOD GoToPosition : BOOL
+VAR_INPUT
+	Position : LREAL;
+	Velocity : REAL;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF State = _02_mEnable THEN
+	State := _06_mGoToPosition;
+	POSControl.Velocity := REAL_TO_INT( Velocity*252);
+	POSControl.StartType := StartType.Absolute;
+	POSControl.TargetPosition := LREAL_TO_UDINT(Position*8062.72);
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="InTarget" Id="{45d1a00c-f015-4275-9637-dcc7fb103714}">
+      <Declaration><![CDATA[PROPERTY InTarget : bool]]></Declaration>
+      <Get Name="Get" Id="{348b89ca-9997-4f57-90d2-2af53e069e66}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[InTarget := _InTarget;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Method Name="MoveAtVelocity" Id="{a3e3882f-4f97-4cee-9501-79a6538b7718}">
+      <Declaration><![CDATA[METHOD MoveAtVelocity : BOOL
+VAR_INPUT
+	Velocity : REAL;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF State = _02_mEnable THEN
+	State := _09_RunAtExternalVelo;
+	POSControl.Velocity := REAL_TO_INT( Velocity*252);
+	POSControl.StartType := StartType.VeloPositive;
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="Ready" Id="{49e3df1c-7e75-46cd-8d98-5c00c69b033e}">
+      <Declaration><![CDATA[PROPERTY Ready : bool]]></Declaration>
+      <Get Name="Get" Id="{2d0fadb1-ac1c-40d3-833e-2a14060a65a0}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Ready := STMStatus.Ready;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Method Name="Reset" Id="{642776ce-ed1f-4014-bd07-da23a37a2d66}">
+      <Declaration><![CDATA[METHOD Reset : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF STMStatus.Error OR STMStatus.Warning OR POSStatus.Error THEN
+	State := _01_mReset;
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Stop" Id="{e6eed7a9-3f7b-4998-9d25-a5f6272d282c}">
+      <Declaration><![CDATA[METHOD Stop : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF POSControl.Execute THEN
+	State  := _07_mStop;
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <LineIds Name="Ex70x7_DMC_Channel">
+      <LineId Id="93" Count="22" />
+      <LineId Id="121" Count="10" />
+      <LineId Id="185" Count="0" />
+      <LineId Id="133" Count="20" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="Ex70x7_DMC_Channel.ActualPosition.Get">
+      <LineId Id="3" Count="0" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="Ex70x7_DMC_Channel.ActualVelocity.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="Ex70x7_DMC_Channel.CalibrateMotor">
+      <LineId Id="3" Count="5" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="Ex70x7_DMC_Channel.Disable">
+      <LineId Id="3" Count="1" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="Ex70x7_DMC_Channel.Enable">
+      <LineId Id="3" Count="1" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="Ex70x7_DMC_Channel.GoToPosition">
+      <LineId Id="3" Count="4" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="Ex70x7_DMC_Channel.InTarget.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="Ex70x7_DMC_Channel.MoveAtVelocity">
+      <LineId Id="3" Count="3" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="Ex70x7_DMC_Channel.Ready.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="Ex70x7_DMC_Channel.Reset">
+      <LineId Id="3" Count="1" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="Ex70x7_DMC_Channel.Stop">
+      <LineId Id="3" Count="1" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

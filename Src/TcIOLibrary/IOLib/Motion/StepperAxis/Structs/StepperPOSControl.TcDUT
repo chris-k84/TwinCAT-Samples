@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
+  <DUT Name="StepperPOSControl" Id="{87711e8a-4859-414c-902f-1710864272c2}">
+    <Declaration><![CDATA[TYPE StepperPOSControl :
+STRUCT
+	Execute : BOOL;
+	EmergencyStop : BOOL;
+	TargetPosition : UDINT;
+	Velocity : INT;
+	StartType : UINT;
+	Acceleration : UINT;
+	Deceleration : UINT;
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

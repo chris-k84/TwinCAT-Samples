@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
+  <DUT Name="STMInputDevice" Id="{cb60312d-4ada-462a-bfe5-0f9f544f4f08}">
+    <Declaration><![CDATA[TYPE STMInputDevice :
+STRUCT
+	deviceUnderVoltage : BOOL;
+	deviceOverVoltage : BOOL;
+	overTemperatureWarning : BOOL;
+	overTemperatureError : BOOL;
+	generalHWError : BOOL;
+	chn1OpenLoad : BOOL;
+	chn1ShortCircuit : BOOL;
+	chn1MotorOverloadI2TWarning : BOOL;
+	chn1MotorOverloadI2TError : BOOL;
+	chn1AmplifierOverloadI2TWarning : BOOL;
+	chn1AmplifierOverloadI2TError : BOOL;
+	chn1InLimit : BOOL;
+	chn1CommutationError : BOOL;
+	chn2OpenLoad : BOOL;
+	chn2ShortCircuit : BOOL;
+	chn2MotorOverloadI2TWarning : BOOL;
+	chn2MotorOverloadI2TError : BOOL;
+	chn2AmplifierOverloadI2TWarning : BOOL;
+	chn2AmplifierOverloadI2TError : BOOL;
+	chn2InLimit : BOOL;
+	chn2CommutationError : BOOL;
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>
