@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
+  <DUT Name="DeviceState" Id="{5365075f-a8e9-4487-bbb9-594e5c3dcb05}">
+    <Declaration><![CDATA[{attribute 'qualified_only'}
+{attribute 'strict'}
+TYPE DeviceState :
+(
+	DeviceInINIT,
+	DeviceInPREOP,
+	DeviceInBOOT,
+	DeviceInSAFEOP,
+	DeviceInOP
+):= DeviceInINIT;
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

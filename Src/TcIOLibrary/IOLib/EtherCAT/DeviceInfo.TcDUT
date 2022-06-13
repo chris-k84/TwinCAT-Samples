@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
+  <DUT Name="DeviceInfo" Id="{16800bd5-28cd-4110-aab3-8350a405db39}">
+    <Declaration><![CDATA[{attribute 'qualified_only'}
+{attribute 'strict'}
+TYPE DeviceInfo :
+(
+	NoInfo,
+	DeviceSignalError,
+	VPRSInvalid,
+	InitError,
+	Disabled,
+	DeviceNotPresent,
+	DeviceLinkError,
+	DeviceMissingLink,
+	DeviceUnexpectedLink,
+	CommsPortA,
+	CommsPortB,
+	CommsPortC,
+	CommsPortD
+);
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

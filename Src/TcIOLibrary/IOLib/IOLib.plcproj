@@ -17,6 +17,12 @@
     <LibraryReferences>{80bc9844-a54c-4f6d-8e61-36789cfc3bc2}</LibraryReferences>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="EtherCAT\DeviceInfo.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="EtherCAT\DeviceState.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="EtherCAT\EtherCATDeviceBase.TcPOU">
       <SubType>Code</SubType>
     </Compile>
