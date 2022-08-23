@@ -1,0 +1,94 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
+  <POU Name="DynamicMemoryTesting" Id="{0cb59495-7a14-4c26-a208-a31d31d8dccc}" SpecialFunc="None">
+    <Declaration><![CDATA[PROGRAM DynamicMemoryTesting
+VAR
+	bCreateStatic	: BOOL := FALSE;
+	bCreateDynamic	: BOOL := FALSE;
+	bDelete			: BOOL := FALSE;
+	pStaticLength 	: ARRAY [1..10] OF POINTER TO Struct1;
+	pDynamicLength	: POINTER TO POINTER TO Struct1;
+	//	pStaticLength 	: ARRAY [1..10] OF POINTER TO FB_Object;
+	//	pDynamicLength	: POINTER TO POINTER TO FB_Object;
+	nIdx			: INT;
+	nMax 			: INT := 10;
+	bTest : BOOL;
+	i: INT;
+	bOK : BOOL;
+	fbMem : Tc3_DynamicMemory.FB_DynMem_Manager2;
+	ptrFbMem: POINTER TO Struct1;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[// pStaticLength can be used when static information about array size is given
+
+IF bCreateStatic THEN
+	FOR nIdx := 1 TO 10 DO
+		pStaticLength[nIdx] := __NEW(Struct1);
+	END_FOR
+	//	FOR nIdx := 1 TO 10 DO
+//		pStaticLength[nIdx] := __NEW(FB_Object(IsEnabled := TRUE, Index := 0));
+//	END_FOR
+	bCreateStatic := FALSE;
+END_IF
+
+//==================================================================================
+// pDynamicLength must be used when array length is defined during runtime
+
+IF bCreateDynamic THEN
+	pDynamicLength := __NEW(POINTER TO Struct1, nMax);
+	
+	FOR nIdx := 0 TO nMax-1 DO
+		pDynamicLength[nIdx] := __NEW(Struct1);
+	END_FOR
+
+	pDynamicLength^[5].in1 := TRUE;
+	pDynamicLength^[6].in2 := 100;
+	
+//	pDynamicLength := __NEW(POINTER TO FB_Object, nMax);
+	
+//	FOR nIdx := 0 TO nMax-1 DO
+//		pDynamicLength[nIdx] := __NEW(FB_Object(IsEnabled := TRUE, Index := nIdx));
+//	END_FOR
+
+	ptrFbMem := fbMem.Alloc(nSize := SIZEOF(Struct1),bReset := TRUE);
+	bCreateDynamic := FALSE;
+END_IF
+
+
+IF bDelete THEN
+	__DELETE(pDynamicLength);
+	FOR nIdx := 1 TO 10 DO
+		__DELETE(pStaticLength[nIdx]);
+	END_FOR
+	fbMem.Free2(p := ptrFbMem);
+	bDelete := FALSE;
+END_IF
+
+//==================================================================================
+IF bOK THEN
+	bTest := pDynamicLength^[i].in1;
+END_IF]]></ST>
+    </Implementation>
+    <LineIds Name="DynamicMemoryTesting">
+      <LineId Id="21" Count="5" />
+      <LineId Id="164" Count="1" />
+      <LineId Id="27" Count="14" />
+      <LineId Id="70" Count="0" />
+      <LineId Id="43" Count="0" />
+      <LineId Id="167" Count="3" />
+      <LineId Id="166" Count="0" />
+      <LineId Id="177" Count="0" />
+      <LineId Id="176" Count="0" />
+      <LineId Id="44" Count="1" />
+      <LineId Id="60" Count="0" />
+      <LineId Id="182" Count="0" />
+      <LineId Id="61" Count="1" />
+      <LineId Id="180" Count="1" />
+      <LineId Id="63" Count="0" />
+      <LineId Id="178" Count="0" />
+      <LineId Id="64" Count="5" />
+      <LineId Id="5" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

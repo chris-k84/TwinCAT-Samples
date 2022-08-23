@@ -1,0 +1,163 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
+  <POU Name="ADSReadBasic" Id="{0ffe9e63-1be4-478e-95e1-bcfdc1358ff7}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK ADSReadBasic
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+	AdsRead : ADSREAD;
+	rtrig : R_TRIG;
+	ReadState : INT;
+	_Busy : BOOL;
+	_done : BOOL;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[//Sequence
+CASE ReadState OF
+	0://Wait for Read Command
+		IF rtrig.Q THEN
+			_done := FALSE;
+			_Busy := TRUE;
+			AdsRead.READ := TRUE;
+			ReadState := 10;
+		END_IF
+	10://Wait for read busy
+		IF AdsRead.BUSY THEN
+			ReadState := 20;
+		END_IF
+	20://Wait for execute finish
+		IF NOT AdsRead.BUSY THEN
+			_Busy := FALSE;
+			_done := true;
+			AdsRead.READ := FALSE;
+			rtrig.CLK := FALSE;
+			ReadState := 0;
+		END_IF
+END_CASE
+
+//Outputs
+
+//FBs
+rtrig();
+AdsRead(TMOUT := T#5S);]]></ST>
+    </Implementation>
+    <Property Name="Busy" Id="{682f512b-183c-4a93-9244-aa2a70d83e38}">
+      <Declaration><![CDATA[PROPERTY Busy : BOOL
+]]></Declaration>
+      <Get Name="Get" Id="{f9d5266e-78d3-4100-b386-c27b9870d325}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Busy := THIS^._Busy;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="Done" Id="{dce508fd-599c-4458-8815-2339dd23e2c0}">
+      <Declaration><![CDATA[PROPERTY Done : BOOL]]></Declaration>
+      <Get Name="Get" Id="{cd0f783a-b08e-4a79-85c3-3b87bd34d6dc}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Done := _done;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="Error" Id="{d8eed527-635f-498b-bd98-d5582534bf44}">
+      <Declaration><![CDATA[{warning 'add property implementation'}
+PROPERTY Error : BOOL
+]]></Declaration>
+      <Get Name="Get" Id="{103f2642-8799-4c0b-b481-1f6932314715}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Error := AdsRead.ERR;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="ErrorId" Id="{e5c429b5-4c36-4239-97b2-0585e498513c}">
+      <Declaration><![CDATA[{warning 'add property implementation'}
+PROPERTY ErrorId : UDINT
+]]></Declaration>
+      <Get Name="Get" Id="{89b589ed-8869-4a6c-8319-114d30b8b065}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[ErrorId := AdsRead.ERRID;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Method Name="Execute" Id="{8663fbcd-01ed-497d-a9cb-e4bbfca9b8dd}">
+      <Declaration><![CDATA[METHOD PUBLIC Execute : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[ IF NOT rtrig.CLK THEN
+	 rtrig.CLK := true;
+ END_IF
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="SetADSReadTarget" Id="{457af66e-c705-4e7d-a3ed-92d52625251b}">
+      <Declaration><![CDATA[METHOD PUBLIC SetADSReadTarget : BOOL
+VAR_INPUT
+	TargetNetId     : T_AmsNetId;
+    TargetPort      : T_AmsPort;
+    AdsIdxGrp    : UDINT;
+    AdsIdxOff   : UDINT;
+    ReadLength       : UDINT;
+    ReadVarAddr  : PVOID;	
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[AdsRead.DESTADDR := ReadVarAddr;
+AdsRead.IDXGRP := AdsIdxGrp;
+AdsRead.IDXOFFS := AdsIdxOff;
+AdsRead.LEN := ReadLength;
+AdsRead.NETID := TargetNetId;
+AdsRead.PORT := TargetPort;]]></ST>
+      </Implementation>
+    </Method>
+    <LineIds Name="ADSReadBasic">
+      <LineId Id="146" Count="3" />
+      <LineId Id="183" Count="0" />
+      <LineId Id="150" Count="10" />
+      <LineId Id="184" Count="0" />
+      <LineId Id="161" Count="4" />
+      <LineId Id="167" Count="0" />
+      <LineId Id="166" Count="0" />
+      <LineId Id="169" Count="0" />
+      <LineId Id="168" Count="0" />
+      <LineId Id="170" Count="0" />
+      <LineId Id="9" Count="0" />
+    </LineIds>
+    <LineIds Name="ADSReadBasic.Busy.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="ADSReadBasic.Done.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="ADSReadBasic.Error.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="ADSReadBasic.ErrorId.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="ADSReadBasic.Execute">
+      <LineId Id="5" Count="0" />
+      <LineId Id="13" Count="1" />
+      <LineId Id="9" Count="0" />
+    </LineIds>
+    <LineIds Name="ADSReadBasic.SetADSReadTarget">
+      <LineId Id="5" Count="0" />
+      <LineId Id="15" Count="4" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

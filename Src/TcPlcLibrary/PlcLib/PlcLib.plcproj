@@ -2,28 +2,34 @@
   <PropertyGroup>
     <FileVersion>1.0.0.0</FileVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{06a8567d-5e32-47d4-aa02-9ca0afc40a2f}</ProjectGuid>
+    <ProjectGuid>{84a92847-9052-46d3-b30e-6a9b71beaf59}</ProjectGuid>
     <SubObjectsSortedByName>True</SubObjectsSortedByName>
     <DownloadApplicationInfo>true</DownloadApplicationInfo>
     <WriteProductVersion>true</WriteProductVersion>
     <GenerateTpy>false</GenerateTpy>
-    <Name>EventLib</Name>
+    <Name>PlcLib</Name>
     <ProgramVersion>3.1.4023.0</ProgramVersion>
-    <Application>{3c6f10a3-00de-4fdb-a7b5-4c1bf4ece94a}</Application>
-    <TypeSystem>{6e99c444-7095-4d26-a359-6bfa47d14627}</TypeSystem>
-    <Implicit_Task_Info>{81575239-69fc-4608-ae5d-71a781dd238b}</Implicit_Task_Info>
-    <Implicit_KindOfTask>{acaaa1b9-3eb3-49b7-b099-ffc4308f3d68}</Implicit_KindOfTask>
-    <Implicit_Jitter_Distribution>{d55c8425-67a5-49ed-9207-c5bfe2aea2a4}</Implicit_Jitter_Distribution>
-    <LibraryReferences>{886981e2-7390-4fd5-acf5-53eb6eb5415e}</LibraryReferences>
+    <Application>{e2477e99-b8e9-4911-b7c0-fcfcf328b57b}</Application>
+    <TypeSystem>{6f9d2cdf-8139-4f9c-895a-5f8ced96dfa7}</TypeSystem>
+    <Implicit_Task_Info>{5f622ca7-53fd-4319-8a1f-face63b06d3c}</Implicit_Task_Info>
+    <Implicit_KindOfTask>{17f69c67-b598-4481-944e-a5d5e2f8d873}</Implicit_KindOfTask>
+    <Implicit_Jitter_Distribution>{18ceaf97-3af2-4661-b790-f10858e8f4f9}</Implicit_Jitter_Distribution>
+    <LibraryReferences>{40c1c5df-8273-4139-a2a4-b97bf0d54c5b}</LibraryReferences>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="EventLoggerClass\ITcMessage_Ext.TcIO">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="EventLoggerClass\TcMessage_Ext.TcPOU">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="PlcTask.TcTTO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\ADSReadBasic.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\ADSTesting.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\DynamicMemoryTesting.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\InterfaceTesting.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\MAIN.TcPOU">
@@ -32,7 +38,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="DUTs" />
-    <Folder Include="EventLoggerClass" />
     <Folder Include="GVLs" />
     <Folder Include="VISUs" />
     <Folder Include="POUs" />
@@ -45,10 +50,6 @@
     <PlaceholderReference Include="Tc2_System">
       <DefaultResolution>Tc2_System, * (Beckhoff Automation GmbH)</DefaultResolution>
       <Namespace>Tc2_System</Namespace>
-    </PlaceholderReference>
-    <PlaceholderReference Include="Tc3_EventLogger">
-      <DefaultResolution>Tc3_EventLogger, * (Beckhoff Automation GmbH)</DefaultResolution>
-      <Namespace>Tc3_EventLogger</Namespace>
     </PlaceholderReference>
     <PlaceholderReference Include="Tc3_Module">
       <DefaultResolution>Tc3_Module, * (Beckhoff Automation GmbH)</DefaultResolution>

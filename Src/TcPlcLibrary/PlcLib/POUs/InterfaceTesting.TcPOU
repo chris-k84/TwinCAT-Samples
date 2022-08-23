@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
+  <POU Name="InterfaceTesting" Id="{99f5130b-9b5f-4b2d-99a7-ef2887d70542}" SpecialFunc="None">
+    <Declaration><![CDATA[PROGRAM InterfaceTesting
+VAR
+	fbTest : TestPass;
+	fbBase : FB_BaseST;
+	iBase : ITF_Base := fbBase;
+	fb_ext : FB_ExtendedST;
+	itfext : ITF_Extended := fb_ext;
+	castSuccess : BOOL;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[fbTest(itfIn := iBase);
+
+castSuccess := FALSE;
+IF __QUERYINTERFACE(fb_ext,itfext) THEN
+	castSuccess := TRUE;
+END_IF]]></ST>
+    </Implementation>
+    <LineIds Name="InterfaceTesting">
+      <LineId Id="11" Count="0" />
+      <LineId Id="20" Count="0" />
+      <LineId Id="15" Count="3" />
+    </LineIds>
+  </POU>
+</TcPlcObject>
