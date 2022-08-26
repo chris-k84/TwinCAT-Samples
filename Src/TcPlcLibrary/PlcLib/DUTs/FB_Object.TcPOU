@@ -1,0 +1,69 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
+  <POU Name="FB_Object" Id="{b5cde4e1-0d3d-4cec-9ffd-a4b8d7366ca7}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_Object
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Property Name="Index" Id="{3dee1e96-bba9-4682-8032-9c9b591f0f26}">
+      <Declaration><![CDATA[PROPERTY Index : int]]></Declaration>
+      <Get Name="Get" Id="{51f1c38d-d294-4e08-a558-cd9f7e9dd460}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[]]></ST>
+        </Implementation>
+      </Get>
+      <Set Name="Set" Id="{ee8fc1b6-417e-4f91-a117-e6c246cdadeb}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
+    <Property Name="IsEnabled" Id="{2a44d89f-58c4-47bd-924f-d35123939f43}">
+      <Declaration><![CDATA[PROPERTY IsEnabled : bool]]></Declaration>
+      <Get Name="Get" Id="{9daf83a8-ab2a-46ac-a755-167f27f5a86e}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[]]></ST>
+        </Implementation>
+      </Get>
+      <Set Name="Set" Id="{861925f1-fcb3-404f-b975-f6abd1d94937}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
+    <LineIds Name="FB_Object">
+      <LineId Id="9" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Object.Index.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Object.Index.Set">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Object.IsEnabled.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Object.IsEnabled.Set">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>
