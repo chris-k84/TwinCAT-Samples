@@ -1,7 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
   <DUT Name="Struct1" Id="{b7deaa78-7cc7-463d-8848-17a34c98d760}">
-    <Declaration><![CDATA[TYPE Struct1 :
+    <Declaration><![CDATA[{attribute 'enable_dynamic_creation'}
+TYPE Struct1 :
 STRUCT
 	bIn : BOOL;
 	iIn : INT;

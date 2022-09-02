@@ -3,8 +3,8 @@
   <POU Name="InterfaceTesting" Id="{99f5130b-9b5f-4b2d-99a7-ef2887d70542}" SpecialFunc="None">
     <Declaration><![CDATA[PROGRAM InterfaceTesting
 VAR
-	fbParent : FB_Object;
-	fbChild : FB_ObjectExt;
+	fbParent : FB_Object(FALSE,1);
+	fbChild : FB_ObjectExt(FALSE,2);
 	fbSecond : FB_SecondObject;
 	
 	//Declaration interface assignment

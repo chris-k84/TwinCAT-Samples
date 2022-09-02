@@ -1,0 +1,10 @@
+<TcModuleRefactorInfos RefactorCnt="1">
+  <TcModuleRefactorInfo RefactorCnt="1" DateTime="2022-09-02T21:58:31">
+    <Renames>
+      <RenameSymbol>
+        <From>InterfaceTesting.fbOther</From>
+        <To>InterfaceTesting.fbSecond</To>
+      </RenameSymbol>
+    </Renames>
+  </TcModuleRefactorInfo>
+</TcModuleRefactorInfos>

@@ -1,7 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
   <POU Name="FB_Object" Id="{b5cde4e1-0d3d-4cec-9ffd-a4b8d7366ca7}" SpecialFunc="None">
-    <Declaration><![CDATA[FUNCTION_BLOCK FB_Object IMPLEMENTS ITF_Object
+    <Declaration><![CDATA[{attribute 'enable_dynamic_creation'}
+FUNCTION_BLOCK FB_Object IMPLEMENTS ITF_Object
 VAR_INPUT
 END_VAR
 VAR_OUTPUT
@@ -12,6 +13,19 @@ END_VAR
     <Implementation>
       <ST><![CDATA[]]></ST>
     </Implementation>
+    <Method Name="FB_init" Id="{f1035814-2d84-49f8-941c-e56c78d9e28e}">
+      <Declaration><![CDATA[METHOD FB_init : BOOL
+VAR_INPUT
+	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
+	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
+	IsEnabled : BOOL;
+	Index : INT;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[]]></ST>
+      </Implementation>
+    </Method>
     <Property Name="Index" Id="{3dee1e96-bba9-4682-8032-9c9b591f0f26}">
       <Declaration><![CDATA[PROPERTY Index : int]]></Declaration>
       <Get Name="Get" Id="{51f1c38d-d294-4e08-a558-cd9f7e9dd460}">
@@ -52,6 +66,9 @@ END_VAR
     </Property>
     <LineIds Name="FB_Object">
       <LineId Id="9" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Object.FB_init">
+      <LineId Id="7" Count="0" />
     </LineIds>
     <LineIds Name="FB_Object.Index.Get">
       <LineId Id="2" Count="0" />
