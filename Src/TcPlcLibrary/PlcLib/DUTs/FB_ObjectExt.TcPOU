@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
+  <POU Name="FB_ObjectExt" Id="{f6144f08-4245-4a22-86cd-bc3bb32680cc}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_ObjectExt EXTENDS FB_Object IMPLEMENTS ITF_ObjectExt
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Method Name="AddSomeValues" Id="{8e26ebe2-fffe-429f-baa7-d1cca7448623}">
+      <Declaration><![CDATA[METHOD AddSomeValues : int
+VAR_INPUT
+	x : INT;
+	y : INT;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[AddSomeValues := x + y;]]></ST>
+      </Implementation>
+    </Method>
+    <LineIds Name="FB_ObjectExt">
+      <LineId Id="9" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_ObjectExt.AddSomeValues">
+      <LineId Id="5" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

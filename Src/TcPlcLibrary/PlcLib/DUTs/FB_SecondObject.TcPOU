@@ -1,0 +1,66 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
+  <POU Name="FB_SecondObject" Id="{fbd3061f-5804-4489-9875-37b80a2f97b3}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_SecondObject
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+	_parentObject : ITF_Object;
+	hResult : INT;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Method Name="AttemptCast" Id="{df8cd038-645c-4135-9171-9ef57d6861a3}">
+      <Declaration><![CDATA[METHOD AttemptCast : BOOL
+VAR_INPUT
+END_VAR
+VAR
+	itfChild : ITF_ObjectExt;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF __QUERYINTERFACE(_parentObject,itfChild) THEN
+	hResult := itfChild.AddSomeValues(2,2);
+	AttemptCast := TRUE;
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="ParentObject" Id="{c7e52004-28a9-4ee7-9d15-00f540ed35e3}">
+      <Declaration><![CDATA[PROPERTY ParentObject : ITF_Object]]></Declaration>
+      <Get Name="Get" Id="{13707b24-db25-4573-9c5e-7d14fa01fecd}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[ParentObject := _parentObject;]]></ST>
+        </Implementation>
+      </Get>
+      <Set Name="Set" Id="{2feaec1f-fbca-4cfc-80ad-b60d68131550}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[_parentObject := ParentObject;]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
+    <LineIds Name="FB_SecondObject">
+      <LineId Id="9" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_SecondObject.AttemptCast">
+      <LineId Id="7" Count="0" />
+      <LineId Id="11" Count="0" />
+      <LineId Id="8" Count="0" />
+      <LineId Id="5" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_SecondObject.ParentObject.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_SecondObject.ParentObject.Set">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

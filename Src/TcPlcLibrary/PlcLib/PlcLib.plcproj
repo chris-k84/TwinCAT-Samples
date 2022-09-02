@@ -20,6 +20,21 @@
     <Compile Include="DUTs\FB_Object.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="DUTs\FB_ObjectExt.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\FB_SecondObject.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\FB_ThirdObject.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\ITF_Object.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\ITF_ObjectExt.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="DUTs\Struct1.TcDUT">
       <SubType>Code</SubType>
     </Compile>
@@ -65,6 +80,11 @@
       <DefaultResolution>Tc3_Module, * (Beckhoff Automation GmbH)</DefaultResolution>
       <Namespace>Tc3_Module</Namespace>
     </PlaceholderReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="PlcLib.tmc">
+      <SubType>Content</SubType>
+    </None>
   </ItemGroup>
   <ProjectExtensions>
     <PlcProjectOptions>

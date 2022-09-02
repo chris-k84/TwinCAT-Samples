@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
   <POU Name="FB_Object" Id="{b5cde4e1-0d3d-4cec-9ffd-a4b8d7366ca7}" SpecialFunc="None">
-    <Declaration><![CDATA[FUNCTION_BLOCK FB_Object
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_Object IMPLEMENTS ITF_Object
 VAR_INPUT
 END_VAR
 VAR_OUTPUT

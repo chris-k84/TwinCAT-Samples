@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
+  <Itf Name="ITF_Object" Id="{2b0b3e0f-86b8-4a58-808e-487231f944d3}">
+    <Declaration><![CDATA[INTERFACE ITF_Object
+]]></Declaration>
+    <Property Name="Index" Id="{304f8c06-1551-4318-8628-aa3a5da2f156}">
+      <Declaration><![CDATA[PROPERTY Index : int]]></Declaration>
+      <Get Name="Get" Id="{6a0576db-67fc-4ffa-9d3b-538d89a4a887}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+      <Set Name="Set" Id="{8cd099b0-beb2-440a-8836-3a651c2f23f6}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Set>
+    </Property>
+  </Itf>
+</TcPlcObject>

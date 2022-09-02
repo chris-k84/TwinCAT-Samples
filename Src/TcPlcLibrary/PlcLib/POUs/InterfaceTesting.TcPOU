@@ -3,26 +3,36 @@
   <POU Name="InterfaceTesting" Id="{99f5130b-9b5f-4b2d-99a7-ef2887d70542}" SpecialFunc="None">
     <Declaration><![CDATA[PROGRAM InterfaceTesting
 VAR
-	fbTest : TestPass;
-	fbBase : FB_BaseST;
-	iBase : ITF_Base := fbBase;
-	fb_ext : FB_ExtendedST;
-	itfext : ITF_Extended := fb_ext;
-	castSuccess : BOOL;
+	fbParent : FB_Object;
+	fbChild : FB_ObjectExt;
+	fbSecond : FB_SecondObject;
+	
+	//Declaration interface assignment
+	iParent : ITF_Object := fbParent;
+	iChild : ITF_ObjectExt;
+	
+	//Declaration interface injected through constructor
+	fbThird : FB_ThirdObject(ParentObject := fbParent);
+	bCastResult : BOOL;
 END_VAR
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[fbTest(itfIn := iBase);
+      <ST><![CDATA[//Interface assignment in code
+iChild := fbChild;
 
-castSuccess := FALSE;
-IF __QUERYINTERFACE(fb_ext,itfext) THEN
-	castSuccess := TRUE;
-END_IF]]></ST>
+//Interface in property takes the parent interface
+//passing child class here
+fbSecond.ParentObject := fbChild;
+
+//use method call to test cast
+//child passed in using parent interface, need to cast to use child interface methods
+bCastResult := fbSecond.AttemptCast();
+
+]]></ST>
     </Implementation>
     <LineIds Name="InterfaceTesting">
-      <LineId Id="11" Count="0" />
-      <LineId Id="20" Count="0" />
-      <LineId Id="15" Count="3" />
+      <LineId Id="54" Count="10" />
+      <LineId Id="18" Count="0" />
     </LineIds>
   </POU>
 </TcPlcObject>
