@@ -16,160 +16,113 @@ VAR
 END_VAR
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[CheckToggle();
-CheckWcState();]]></ST>
-    </Implementation>
-    <Method Name="CheckInfo" Id="{e3ed08f6-1d09-4289-adea-134d1da3da9b}">
-      <Declaration><![CDATA[METHOD PUBLIC CheckInfo : DeviceInfo
-VAR_INPUT
-END_VAR
-]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[IF State.4 THEN
-	CheckInfo := DeviceInfo.DeviceSignalError;
-ELSIF State.5 THEN
-	CheckInfo := DeviceInfo.VPRSInvalid;
-ELSIF State.6 THEN
-	CheckInfo := DeviceInfo.InitError;
-ELSIF State.7 THEN
-	CheckInfo := DeviceInfo.Disabled;
-ELSIF State.8 THEN
-	CheckInfo := DeviceInfo.DeviceNotPresent;
-ELSIF State.9 THEN
-	CheckInfo := DeviceInfo.DeviceLinkError;
-ELSIF State.10 THEN
-	CheckInfo := DeviceInfo.DeviceMissingLink;
-ELSIF State.11 THEN
-	CheckInfo := DeviceInfo.DeviceUnexpectedLink;
-ELSIF State.12 THEN
-	CheckInfo := DeviceInfo.CommsPortA;
-ELSIF State.13 THEN
-	CheckInfo := DeviceInfo.CommsPortB;
-ELSIF State.14 THEN
-	CheckInfo := DeviceInfo.CommsPortC;
-ELSIF State.15 THEN
-	CheckInfo := DeviceInfo.CommsPortD;
-ELSE
-	CheckInfo := DeviceInfo.NoInfo;
-END_IF]]></ST>
-      </Implementation>
-    </Method>
-    <Method Name="CheckState" Id="{4d58b3ef-f1a5-41c8-8715-19de4ad3ab9a}">
-      <Declaration><![CDATA[METHOD PUBLIC CheckState : DeviceState
-VAR_INPUT
-END_VAR
-]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[IF State.0 THEN
-	CheckState := DeviceState.DeviceInINIT;
-ELSIF State.1 THEN
-	CheckState := DeviceState.DeviceInPREOP;
-ELSIF State.1 AND State.0 THEN
-	CheckState := DeviceState.DeviceInBOOT;
-ELSIF State.2 THEN
-	CheckState := DeviceState.DeviceInSAFEOP;
-ELSIF State.3 THEN
-	CheckState := DeviceState.DeviceInOP;
-END_IF
-]]></ST>
-      </Implementation>
-    </Method>
-    <Method Name="CheckToggle" Id="{21edd632-d881-4cad-a72c-5e52d8ad4324}">
-      <Declaration><![CDATA[METHOD PRIVATE CheckToggle : BOOL
-VAR_INPUT
-END_VAR
-]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[IF InputToggle <> PreviousToggle THEN
+      <ST><![CDATA[///Cyclic Toggle Update
+IF InputToggle <> PreviousToggle THEN
 	_pdoUpdateOK := TRUE;
 ELSE
 	_pdoUpdateOK := FALSE;
 END_IF
-PreviousToggle := InputToggle;]]></ST>
-      </Implementation>
-    </Method>
-    <Method Name="CheckWcState" Id="{3be0efb7-e188-4bdc-954e-d1dae69c1876}">
-      <Declaration><![CDATA[METHOD PRIVATE CheckWcState : BOOL
+PreviousToggle := InputToggle;
+
+///Cyclic WcState Update
+_deviceOperationOK := NOT WcState;]]></ST>
+    </Implementation>
+    <Method Name="GetDeviceInfo" Id="{e3ed08f6-1d09-4289-adea-134d1da3da9b}">
+      <Declaration><![CDATA[METHOD PUBLIC GetDeviceInfo : DeviceInfo
 VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[_deviceOperationOK := NOT WcState;]]></ST>
+        <ST><![CDATA[////Check Info
+IF State.4 THEN
+	GetDeviceInfo := DeviceInfo.DeviceSignalError;
+ELSIF State.5 THEN
+	GetDeviceInfo := DeviceInfo.VPRSInvalid;
+ELSIF State.6 THEN
+	GetDeviceInfo := DeviceInfo.InitError;
+ELSIF State.7 THEN
+	GetDeviceInfo := DeviceInfo.Disabled;
+ELSIF State.8 THEN
+	GetDeviceInfo := DeviceInfo.DeviceNotPresent;
+ELSIF State.9 THEN
+	GetDeviceInfo := DeviceInfo.DeviceLinkError;
+ELSIF State.10 THEN
+	GetDeviceInfo := DeviceInfo.DeviceMissingLink;
+ELSIF State.11 THEN
+	GetDeviceInfo := DeviceInfo.DeviceUnexpectedLink;
+ELSIF State.12 THEN
+	GetDeviceInfo := DeviceInfo.CommsPortA;
+ELSIF State.13 THEN
+	GetDeviceInfo := DeviceInfo.CommsPortB;
+ELSIF State.14 THEN
+	GetDeviceInfo := DeviceInfo.CommsPortC;
+ELSIF State.15 THEN
+	GetDeviceInfo := DeviceInfo.CommsPortD;
+ELSE
+	GetDeviceInfo := DeviceInfo.NoInfo;
+END_IF]]></ST>
       </Implementation>
     </Method>
-    <Property Name="DeviceOperationOK" Id="{fa074715-11d5-4b54-93ac-aebaed7412d1}">
-      <Declaration><![CDATA[PROPERTY PUBLIC DeviceOperationOK : bool]]></Declaration>
-      <Get Name="Get" Id="{728eb35e-b660-455d-95fa-cab89932592f}">
-        <Declaration><![CDATA[VAR
+    <Method Name="GetPdoUpdateState" Id="{21edd632-d881-4cad-a72c-5e52d8ad4324}">
+      <Declaration><![CDATA[METHOD PRIVATE GetPdoUpdateState : BOOL
+VAR_INPUT
 END_VAR
 ]]></Declaration>
-        <Implementation>
-          <ST><![CDATA[]]></ST>
-        </Implementation>
-      </Get>
-    </Property>
-    <Property Name="PDOUpdateOK" Id="{50d669dc-4e57-442d-b194-933b42b56708}">
-      <Declaration><![CDATA[PROPERTY PUBLIC PDOUpdateOK : bool]]></Declaration>
-      <Get Name="Get" Id="{da5d498f-e08e-4916-a3df-9b95b1a7a69d}">
-        <Declaration><![CDATA[VAR
+      <Implementation>
+        <ST><![CDATA[GetPdoUpdateState := _pdoUpdateOK;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="GetStateInfo" Id="{4d58b3ef-f1a5-41c8-8715-19de4ad3ab9a}">
+      <Declaration><![CDATA[METHOD PUBLIC GetStateInfo : DeviceState
+VAR_INPUT
 END_VAR
 ]]></Declaration>
-        <Implementation>
-          <ST><![CDATA[PDOUpdateOK := _pdoUpdateOK;]]></ST>
-        </Implementation>
-      </Get>
-    </Property>
+      <Implementation>
+        <ST><![CDATA[////Check State
+IF State.0 THEN
+	GetStateInfo := DeviceState.DeviceInINIT;
+ELSIF State.1 THEN
+	GetStateInfo := DeviceState.DeviceInPREOP;
+ELSIF State.1 AND State.0 THEN
+	GetStateInfo := DeviceState.DeviceInBOOT;
+ELSIF State.2 THEN
+	GetStateInfo := DeviceState.DeviceInSAFEOP;
+ELSIF State.3 THEN
+	GetStateInfo := DeviceState.DeviceInOP;
+END_IF
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="GetWcState" Id="{3be0efb7-e188-4bdc-954e-d1dae69c1876}">
+      <Declaration><![CDATA[METHOD PRIVATE GetWcState : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[GetWcState := _deviceOperationOK;]]></ST>
+      </Implementation>
+    </Method>
     <LineIds Name="EtherCATDeviceBase">
-      <LineId Id="9" Count="0" />
-      <LineId Id="29" Count="0" />
+      <LineId Id="83" Count="0" />
+      <LineId Id="86" Count="4" />
+      <LineId Id="85" Count="0" />
+      <LineId Id="92" Count="0" />
+      <LineId Id="91" Count="0" />
+      <LineId Id="93" Count="0" />
     </LineIds>
-    <LineIds Name="EtherCATDeviceBase.CheckInfo">
-      <LineId Id="7" Count="10" />
-      <LineId Id="25" Count="0" />
-      <LineId Id="18" Count="0" />
-      <LineId Id="26" Count="0" />
-      <LineId Id="19" Count="0" />
-      <LineId Id="27" Count="0" />
-      <LineId Id="20" Count="0" />
-      <LineId Id="28" Count="0" />
-      <LineId Id="21" Count="0" />
-      <LineId Id="29" Count="0" />
-      <LineId Id="22" Count="0" />
-      <LineId Id="30" Count="0" />
-      <LineId Id="23" Count="0" />
-      <LineId Id="31" Count="0" />
-      <LineId Id="24" Count="0" />
-      <LineId Id="32" Count="0" />
+    <LineIds Name="EtherCATDeviceBase.GetDeviceInfo">
+      <LineId Id="68" Count="26" />
       <LineId Id="5" Count="0" />
     </LineIds>
-    <LineIds Name="EtherCATDeviceBase.CheckState">
-      <LineId Id="22" Count="0" />
-      <LineId Id="55" Count="0" />
-      <LineId Id="41" Count="0" />
-      <LineId Id="54" Count="0" />
-      <LineId Id="43" Count="0" />
-      <LineId Id="53" Count="0" />
-      <LineId Id="44" Count="0" />
-      <LineId Id="52" Count="0" />
-      <LineId Id="45" Count="0" />
-      <LineId Id="51" Count="0" />
-      <LineId Id="42" Count="0" />
-      <LineId Id="56" Count="0" />
-    </LineIds>
-    <LineIds Name="EtherCATDeviceBase.CheckToggle">
-      <LineId Id="5" Count="1" />
-      <LineId Id="8" Count="1" />
-      <LineId Id="7" Count="0" />
+    <LineIds Name="EtherCATDeviceBase.GetPdoUpdateState">
       <LineId Id="10" Count="0" />
     </LineIds>
-    <LineIds Name="EtherCATDeviceBase.CheckWcState">
+    <LineIds Name="EtherCATDeviceBase.GetStateInfo">
+      <LineId Id="74" Count="11" />
+      <LineId Id="56" Count="0" />
+    </LineIds>
+    <LineIds Name="EtherCATDeviceBase.GetWcState">
       <LineId Id="5" Count="0" />
-    </LineIds>
-    <LineIds Name="EtherCATDeviceBase.DeviceOperationOK.Get">
-      <LineId Id="2" Count="0" />
-    </LineIds>
-    <LineIds Name="EtherCATDeviceBase.PDOUpdateOK.Get">
-      <LineId Id="2" Count="0" />
     </LineIds>
   </POU>
 </TcPlcObject>
