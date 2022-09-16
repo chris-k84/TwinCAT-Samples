@@ -29,13 +29,19 @@
     <Compile Include="CAN\ST_TxRxQueue.TcDUT">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="EtherCAT\DeviceInfo.TcDUT">
+    <Compile Include="EtherCAT\EtherCAT Devices\DeviceInfo.TcDUT">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="EtherCAT\DeviceState.TcDUT">
+    <Compile Include="EtherCAT\EtherCAT Devices\DeviceState.TcDUT">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="EtherCAT\EtherCATDeviceBase.TcPOU">
+    <Compile Include="EtherCAT\EtherCAT Devices\EtherCATDeviceBase.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="EtherCAT\EtherCAT Master\EcMasterInputs.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="EtherCAT\EtherCAT Master\MasterDevState.TcDUT">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="EtherCAT\Tasks\EcMasterConfDevices.TcPOU">
@@ -164,6 +170,8 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="DUTs" />
+    <Folder Include="EtherCAT\EtherCAT Master" />
+    <Folder Include="EtherCAT\EtherCAT Devices" />
     <Folder Include="EtherCAT\Tasks" />
     <Folder Include="GVLs" />
     <Folder Include="Motion" />
