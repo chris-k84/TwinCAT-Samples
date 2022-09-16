@@ -64,7 +64,7 @@ END_IF]]></ST>
       </Implementation>
     </Method>
     <Method Name="GetPdoUpdateState" Id="{21edd632-d881-4cad-a72c-5e52d8ad4324}">
-      <Declaration><![CDATA[METHOD PRIVATE GetPdoUpdateState : BOOL
+      <Declaration><![CDATA[METHOD PUBLIC GetPdoUpdateState : BOOL
 VAR_INPUT
 END_VAR
 ]]></Declaration>
@@ -94,7 +94,7 @@ END_IF
       </Implementation>
     </Method>
     <Method Name="GetWcState" Id="{3be0efb7-e188-4bdc-954e-d1dae69c1876}">
-      <Declaration><![CDATA[METHOD PRIVATE GetWcState : BOOL
+      <Declaration><![CDATA[METHOD Public GetWcState : BOOL
 VAR_INPUT
 END_VAR
 ]]></Declaration>
