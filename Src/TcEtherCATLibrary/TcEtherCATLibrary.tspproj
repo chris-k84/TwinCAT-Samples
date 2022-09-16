@@ -1,8 +1,0 @@
-<?xml version="1.0"?>
-<TcSmProject xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.beckhoff.com/schemas/2012/07/TcSmProject" TcSmVersion="1.0" TcVersion="3.1.4024.29">
-	<Project ProjectGUID="{A6C49463-7CA5-4ECF-80EA-4FC47A7A240D}" Target64Bit="true" ShowHideConfigurations="#x106">
-		<Plc>
-			<Project GUID="{2D95BB33-2B33-40E9-9B18-ED143F4A5A53}" Name="EcLib" PrjFilePath="EcLib\EcLib.plcproj" TmcFilePath="EcLib\EcLib.tmc" ReloadTmc="true" AmsPort="851" FileArchiveSettings="#x000e"/>
-		</Plc>
-	</Project>
-</TcSmProject>

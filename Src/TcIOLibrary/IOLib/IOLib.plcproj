@@ -17,6 +17,18 @@
     <LibraryReferences>{80bc9844-a54c-4f6d-8e61-36789cfc3bc2}</LibraryReferences>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="CAN\FB_CANControl.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CAN\ITF_CANControl.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CAN\ST_TxRxMessage.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CAN\ST_TxRxQueue.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="EtherCAT\DeviceInfo.TcDUT">
       <SubType>Code</SubType>
     </Compile>
@@ -24,6 +36,48 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="EtherCAT\EtherCATDeviceBase.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="EtherCAT\Tasks\EcMasterConfDevices.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="EtherCAT\Tasks\EcMasterDeviceCount.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="EtherCAT\Tasks\EcMasterDeviceState.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="EtherCAT\Tasks\EcMasterFrameCount.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="EtherCAT\Tasks\EcMasterFrameStats.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="EtherCAT\Tasks\EcMasterGetAbnortalStateChange.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="EtherCAT\Tasks\EcMasterGetDeviceCRC.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="EtherCAT\Tasks\EcMasterGetDeviceId.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="EtherCAT\Tasks\EcMasterGetDeviceState.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="EtherCAT\Tasks\EcMasterProtocolError.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="EtherCAT\Tasks\EcMasterScanDevices.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="EtherCAT\Tasks\EcMasterState.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="EtherCAT\Tasks\IEcTask.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="EtherCAT\Tasks\ITask.TcIO">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Motion\RollerAxis\EP7402_0xxx_Channel.TcPOU">
@@ -110,6 +164,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="DUTs" />
+    <Folder Include="EtherCAT\Tasks" />
     <Folder Include="GVLs" />
     <Folder Include="Motion" />
     <Folder Include="Motion\RollerAxis" />
@@ -119,6 +174,7 @@
     <Folder Include="Motion\StepperAxis" />
     <Folder Include="Motion\StepperAxis\Structs" />
     <Folder Include="EtherCAT" />
+    <Folder Include="CAN" />
     <Folder Include="VISUs" />
     <Folder Include="POUs" />
   </ItemGroup>

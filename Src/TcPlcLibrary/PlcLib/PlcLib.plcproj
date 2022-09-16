@@ -38,6 +38,12 @@
     <Compile Include="DUTs\Struct1.TcDUT">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="EventLoggerClass\ITcMessage_Ext.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="EventLoggerClass\TcMessage_Ext.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="PlcTask.TcTTO">
       <SubType>Code</SubType>
     </Compile>
@@ -59,6 +65,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="DUTs" />
+    <Folder Include="EventLoggerClass" />
     <Folder Include="GVLs" />
     <Folder Include="VISUs" />
     <Folder Include="POUs" />

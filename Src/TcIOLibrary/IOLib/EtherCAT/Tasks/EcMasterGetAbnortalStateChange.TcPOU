@@ -1,0 +1,174 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
+  <POU Name="EcMasterGetAbnortalStateChange" Id="{54e7aea4-8580-4f08-a7c1-94b158387c8a}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK EcMasterGetAbnortalStateChange IMPLEMENTS IEcTask
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+	iState : INT;
+	masterAbnormalStateChanges : Tc2_EtherCAT.FB_EcGetAllSlaveAbnormalStateChanges;
+	_abnormalStates : ARRAY[0..Tc2_EtherCAT.EC_MAX_SLAVES] OF UDINT;
+	_execute: BOOL;
+	_done: BOOL;
+	_busy: BOOL;
+	_error: BOOL;
+	_netId: AMSNETID;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[CASE iState OF
+	0:
+		IF _execute THEN
+			_done := FALSE;
+			_busy := TRUE;
+			_error := FALSE;
+			masterAbnormalStateChanges.bExecute := TRUE;
+			IF masterAbnormalStateChanges.bBusy THEN
+				iState := 10;
+				_execute := false;
+			END_IF
+		END_IF
+	10:
+		IF NOT masterAbnormalStateChanges.bBusy THEN
+			IF NOT masterAbnormalStateChanges.bError THEN
+				_done := TRUE;
+			ELSE
+				_error := TRUE;
+			END_IF
+			_busy := FALSE;
+			masterAbnormalStateChanges.bExecute := FALSE;
+			iState := 0;
+		END_IF
+END_CASE
+
+masterAbnormalStateChanges(sNetId := Tc2_System.F_CreateAmsNetId(nIds := NetId),
+							pAddrBuf := ADR(_abnormalStates),
+							cbBufLen := SIZEOF(_abnormalStates));]]></ST>
+    </Implementation>
+    <Property Name="AbnormalStateChanges" Id="{041399b6-9f49-41b2-b7e1-53161e1acdbc}">
+      <Declaration><![CDATA[PROPERTY AbnormalStateChanges : reference to array[0..EC_MAX_Slaves] of udint]]></Declaration>
+      <Get Name="Get" Id="{fa3a17f7-33ee-4524-b465-6e17dd7f3ce8}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[AbnormalStateChanges REF= _abnormalStates;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Method Name="Abort" Id="{4aeada23-ef01-4ed0-b1d9-ff3c9018f806}">
+      <Declaration><![CDATA[{warning 'add method implementation '}
+METHOD Abort : BOOL
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[masterAbnormalStateChanges.bExecute := FALSE;
+_busy := FALSE;
+_execute := FALSE;
+Abort := TRUE;
+iState := 0;]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="Busy" Id="{2d21ffaf-7eb2-44f9-84fb-b01523f117f6}">
+      <Declaration><![CDATA[{warning 'add property implementation'}
+PROPERTY Busy : BOOL
+]]></Declaration>
+      <Get Name="Get" Id="{1070895e-7ad0-44cb-a829-fda17bb40183}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Busy := _busy;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="Done" Id="{d216bd26-8617-4b6a-b8fc-2ffcc367b1e0}">
+      <Declaration><![CDATA[{warning 'add property implementation'}
+PROPERTY Done : BOOL
+]]></Declaration>
+      <Get Name="Get" Id="{9ca6a749-ba19-4143-90f1-01ad3b9285a4}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Done := _done;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="Error" Id="{fa35262e-fa88-4bba-a019-80ddd273baf8}">
+      <Declaration><![CDATA[{warning 'add property implementation'}
+PROPERTY Error : BOOL
+]]></Declaration>
+      <Get Name="Get" Id="{aaa27191-042c-40f3-be14-2bf75cc756f8}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Error := _error;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Method Name="Execute" Id="{0c08dcb7-6da5-4856-95d7-0394ce28af86}">
+      <Declaration><![CDATA[{warning 'add method implementation '}
+METHOD Execute : BOOL
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF NOT masterAbnormalStateChanges.bBusy THEN
+	Execute := _execute := true;
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="NetID" Id="{c8164879-3494-44ea-9ea9-418a67913a95}">
+      <Declaration><![CDATA[{warning 'add property implementation'}
+PROPERTY NetID : amsnetid
+]]></Declaration>
+      <Get Name="Get" Id="{bb7c16f6-a7f2-4c9c-8c71-07c8b25cb62d}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[NetID := _netId;]]></ST>
+        </Implementation>
+      </Get>
+      <Set Name="Set" Id="{978097b9-7af2-400c-a2cd-ef16274d20cd}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[_netId := NetID;]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
+    <LineIds Name="EcMasterGetAbnortalStateChange">
+      <LineId Id="56" Count="24" />
+      <LineId Id="9" Count="0" />
+      <LineId Id="81" Count="1" />
+    </LineIds>
+    <LineIds Name="EcMasterGetAbnortalStateChange.AbnormalStateChanges.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="EcMasterGetAbnortalStateChange.Abort">
+      <LineId Id="5" Count="3" />
+      <LineId Id="4" Count="0" />
+    </LineIds>
+    <LineIds Name="EcMasterGetAbnortalStateChange.Busy.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="EcMasterGetAbnortalStateChange.Done.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="EcMasterGetAbnortalStateChange.Error.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="EcMasterGetAbnortalStateChange.Execute">
+      <LineId Id="4" Count="2" />
+    </LineIds>
+    <LineIds Name="EcMasterGetAbnortalStateChange.NetID.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="EcMasterGetAbnortalStateChange.NetID.Set">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

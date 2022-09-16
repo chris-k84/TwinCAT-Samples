@@ -1,0 +1,190 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
+  <POU Name="EcMasterScanDevices" Id="{e9cf23b1-bc56-4e8a-9132-51e92ca67ec2}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK EcMasterScanDevices IMPLEMENTS IEcTask
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+	iState : INT;
+	masterScanDevices : Tc2_EtherCAT.FB_EcGetScannedSlaves;
+	_scanDevices : ARRAY[0..Tc2_EtherCAT.EC_MAX_SLAVES] OF Tc2_EtherCAT.ST_EcSlaveScannedData;
+	_execute: BOOL;
+	_done: BOOL;
+	_busy: BOOL;
+	_error: BOOL;
+	_netId: AMSNETID;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[CASE iState OF
+	0:
+		IF _execute THEN
+			_done := FALSE;
+			_busy := TRUE;
+			_error := FALSE;
+			masterScanDevices.bExecute := TRUE;
+			IF masterScanDevices.bBusy THEN
+				iState := 10;
+				_execute := false;
+			END_IF
+		END_IF
+	10:
+		IF NOT masterScanDevices.bBusy THEN
+			IF NOT masterScanDevices.bError THEN
+				_done := TRUE;
+			ELSE
+				_error := TRUE;
+			END_IF
+			_busy := FALSE;
+			masterScanDevices.bExecute := FALSE;
+			iState := 0;
+		END_IF
+END_CASE
+
+masterScanDevices(sNetId := Tc2_System.F_CreateAmsNetId(nIds := NetId), 
+					pArrEcScannedSlaveInfo := ADR(_scanDevices), 
+					cbBufLen := SIZEOF(_scanDevices));
+]]></ST>
+    </Implementation>
+    <Method Name="Abort" Id="{721f4d94-1f39-4958-980e-f9bad7204243}">
+      <Declaration><![CDATA[{warning 'add method implementation '}
+METHOD Abort : BOOL
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[masterScanDevices.bExecute := FALSE;
+_busy := FALSE;
+_execute := FALSE;
+Abort := TRUE;
+iState := 0;]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="Busy" Id="{e257315a-2c76-4a3a-862c-b8f1e65f2227}">
+      <Declaration><![CDATA[{warning 'add property implementation'}
+PROPERTY Busy : BOOL
+]]></Declaration>
+      <Get Name="Get" Id="{09f58fb5-4be0-41f3-bfb7-1fb866b25205}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Busy := _busy;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="Done" Id="{0176aa43-2e2d-48d0-9a44-330536bfcda1}">
+      <Declaration><![CDATA[{warning 'add property implementation'}
+PROPERTY Done : BOOL
+]]></Declaration>
+      <Get Name="Get" Id="{c39d20d1-cc89-4ab7-b35b-668cd58f013c}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Done := _done;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="Error" Id="{6594d09c-f78e-41b5-bd66-f54b5b7c566b}">
+      <Declaration><![CDATA[{warning 'add property implementation'}
+PROPERTY Error : BOOL
+]]></Declaration>
+      <Get Name="Get" Id="{f55cb9c0-f6a1-4bb5-bb4e-e7ab8a7e184b}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Error := _error;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Method Name="Execute" Id="{0af45555-7354-4edd-b7e6-387e2fb620e8}">
+      <Declaration><![CDATA[{warning 'add method implementation '}
+METHOD Execute : BOOL
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF NOT masterScanDevices.bBusy THEN
+	Execute := _execute := true;
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="NetID" Id="{cab19973-69d8-4521-b89a-48f6f2a85a27}">
+      <Declaration><![CDATA[{warning 'add property implementation'}
+PROPERTY NetID : amsnetid
+]]></Declaration>
+      <Get Name="Get" Id="{40914e16-660e-4d88-b046-461ce326c266}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[NetID := _netId;]]></ST>
+        </Implementation>
+      </Get>
+      <Set Name="Set" Id="{a2660f98-a4dd-4435-b7da-cf6eb5e8f870}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[_netId := NetID;]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
+    <Property Name="NumberScanDevices" Id="{e2af7382-3e69-453d-882f-b90240b9f7ae}">
+      <Declaration><![CDATA[PROPERTY NumberScanDevices : udint]]></Declaration>
+      <Get Name="Get" Id="{f2c25263-117f-4945-8c9e-7364c70d51d4}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[NumberScanDevices := masterScanDevices.nSlaves;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="ScannedDevices" Id="{72649964-0a1f-4333-a324-808f5f421d1a}">
+      <Declaration><![CDATA[PROPERTY ScannedDevices : reference to array[0..EC_MAX_Slaves] of ST_EcSlaveScannedData]]></Declaration>
+      <Get Name="Get" Id="{efc35bb2-98cc-4980-8f38-29d8c7e9d00a}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[ScannedDevices REF= _scanDevices;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <LineIds Name="EcMasterScanDevices">
+      <LineId Id="156" Count="8" />
+      <LineId Id="183" Count="0" />
+      <LineId Id="165" Count="17" />
+      <LineId Id="9" Count="0" />
+    </LineIds>
+    <LineIds Name="EcMasterScanDevices.Abort">
+      <LineId Id="5" Count="3" />
+      <LineId Id="4" Count="0" />
+    </LineIds>
+    <LineIds Name="EcMasterScanDevices.Busy.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="EcMasterScanDevices.Done.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="EcMasterScanDevices.Error.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="EcMasterScanDevices.Execute">
+      <LineId Id="4" Count="2" />
+    </LineIds>
+    <LineIds Name="EcMasterScanDevices.NetID.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="EcMasterScanDevices.NetID.Set">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="EcMasterScanDevices.NumberScanDevices.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="EcMasterScanDevices.ScannedDevices.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

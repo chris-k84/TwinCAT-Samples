@@ -1,0 +1,234 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
+  <POU Name="EcMasterFrameStats" Id="{0413a492-8e64-4a8a-a602-dee5af2e7896}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK PUBLIC EcMasterFrameStats IMPLEMENTS IEcTask
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+	iState : INT;
+	masterFrameStats : Tc2_EtherCAT.FB_EcMasterFrameStatistic;
+	_execute: BOOL;
+	_done: BOOL;
+	_busy: BOOL;
+	_error: BOOL;
+	_netId: AMSNETID;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[CASE iState OF
+	0:
+		IF _execute THEN
+			_done := FALSE;
+			_busy := TRUE;
+			_error := FALSE;
+			masterFrameStats.bExecute := TRUE;
+			IF masterFrameStats.bBusy THEN
+				iState := 10;
+				_execute := false;
+			END_IF
+		END_IF
+	10:
+		IF NOT masterFrameStats.bBusy THEN
+			IF NOT masterFrameStats.bError THEN
+				_done := TRUE;
+			ELSE
+				_error := TRUE;
+			END_IF
+			_busy := FALSE;
+			masterFrameStats.bExecute := FALSE;
+			iState := 0;
+		END_IF
+END_CASE
+
+masterFrameStats(sNetId := Tc2_System.F_CreateAmsNetId(nIds := NetId));
+]]></ST>
+    </Implementation>
+    <Method Name="Abort" Id="{93e82a1b-6970-422b-b061-d279b2418e13}">
+      <Declaration><![CDATA[{warning 'add method implementation '}
+METHOD Abort : BOOL
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[masterFrameStats.bExecute := FALSE;
+_busy := FALSE;
+_execute := FALSE;
+Abort := TRUE;
+iState := 0;]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="Busy" Id="{10d2f24b-9c28-41bc-894d-d0b8e9ef37e5}">
+      <Declaration><![CDATA[{warning 'add property implementation'}
+PROPERTY Busy : BOOL
+]]></Declaration>
+      <Get Name="Get" Id="{2f26ef72-7b44-426c-b562-e959b69a3eb1}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Busy := _busy;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="Done" Id="{bebea6d1-e9c9-47c8-ab57-d40d151a4baf}">
+      <Declaration><![CDATA[{warning 'add property implementation'}
+PROPERTY Done : BOOL
+]]></Declaration>
+      <Get Name="Get" Id="{16805e6c-b47e-45ec-b102-e48311973c40}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Done := _done;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="Error" Id="{fca1a19f-f3f0-4440-8c41-51c9edc1ae54}">
+      <Declaration><![CDATA[{warning 'add property implementation'}
+PROPERTY Error : BOOL
+]]></Declaration>
+      <Get Name="Get" Id="{c7d76716-e4c4-425a-aa7c-2c92059db891}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Error := _error;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Method Name="Execute" Id="{40b5d161-faf6-48fb-ba4d-510273399f62}">
+      <Declaration><![CDATA[METHOD Execute : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF NOT Busy THEN
+	Execute := _execute := TRUE;
+END_IF
+]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="FramesPerSecond" Id="{6e6fa49c-94c2-49bf-8bdb-2d4a74fd5434}">
+      <Declaration><![CDATA[PROPERTY FramesPerSecond  : LREAL]]></Declaration>
+      <Get Name="Get" Id="{b47865fa-e1a5-4aeb-9d35-beef7507107a}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[FramesPerSecond := masterFrameStats.fFramesPerSecond;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="LostFrames" Id="{50dc00be-18e5-49f3-96fd-c664a3c7bd87}">
+      <Declaration><![CDATA[PROPERTY LostFrames : UDINT]]></Declaration>
+      <Get Name="Get" Id="{aad2e118-8637-4a9b-b166-c49e0f8d4019}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[LostFrames := masterFrameStats.nLostFrames;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="LostQueuedFrames" Id="{dc88780d-37fd-465d-8ee3-84041e07fa1b}">
+      <Declaration><![CDATA[PROPERTY LostQueuedFrames : udint]]></Declaration>
+      <Get Name="Get" Id="{f2974af3-15ca-4fa9-a0d9-620aaccda86c}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[LostQueuedFrames := masterFrameStats.nLostQueuedFrames;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="NetID" Id="{9d7b148c-f32e-4da2-b023-b7f7246c6899}">
+      <Declaration><![CDATA[{warning 'add property implementation'}
+PROPERTY NetID : amsnetid
+]]></Declaration>
+      <Get Name="Get" Id="{09335829-c871-4023-b9a5-7fd879876958}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[NetID := _netId;]]></ST>
+        </Implementation>
+      </Get>
+      <Set Name="Set" Id="{1800f40b-dc45-40c3-a014-03ba4a20f672}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[_netId := NetID;]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
+    <Property Name="QueuedFramesPerSecond" Id="{eaf89791-c3c1-40c0-8944-01ed5c2d6b24}">
+      <Declaration><![CDATA[PROPERTY QueuedFramesPerSecond : lreal]]></Declaration>
+      <Get Name="Get" Id="{14444e4d-7775-4073-a411-ce96dbf3fb70}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[QueuedFramesPerSecond := masterFrameStats.fQueuedFramesPerSecond;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <LineIds Name="EcMasterFrameStats">
+      <LineId Id="9" Count="0" />
+      <LineId Id="11" Count="0" />
+      <LineId Id="17" Count="1" />
+      <LineId Id="21" Count="0" />
+      <LineId Id="23" Count="0" />
+      <LineId Id="25" Count="0" />
+      <LineId Id="27" Count="1" />
+      <LineId Id="43" Count="0" />
+      <LineId Id="29" Count="0" />
+      <LineId Id="19" Count="0" />
+      <LineId Id="13" Count="0" />
+      <LineId Id="31" Count="1" />
+      <LineId Id="34" Count="0" />
+      <LineId Id="36" Count="1" />
+      <LineId Id="35" Count="0" />
+      <LineId Id="38" Count="2" />
+      <LineId Id="33" Count="0" />
+      <LineId Id="12" Count="0" />
+      <LineId Id="16" Count="0" />
+      <LineId Id="15" Count="0" />
+      <LineId Id="41" Count="0" />
+    </LineIds>
+    <LineIds Name="EcMasterFrameStats.Abort">
+      <LineId Id="5" Count="3" />
+      <LineId Id="4" Count="0" />
+    </LineIds>
+    <LineIds Name="EcMasterFrameStats.Busy.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="EcMasterFrameStats.Done.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="EcMasterFrameStats.Error.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="EcMasterFrameStats.Execute">
+      <LineId Id="6" Count="2" />
+      <LineId Id="5" Count="0" />
+    </LineIds>
+    <LineIds Name="EcMasterFrameStats.FramesPerSecond.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="EcMasterFrameStats.LostFrames.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="EcMasterFrameStats.LostQueuedFrames.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="EcMasterFrameStats.NetID.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="EcMasterFrameStats.NetID.Set">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="EcMasterFrameStats.QueuedFramesPerSecond.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>
