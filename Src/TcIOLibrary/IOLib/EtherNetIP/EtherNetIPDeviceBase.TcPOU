@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
+  <POU Name="EtherNetIPDeviceBase" Id="{04ea0fee-aaad-4194-8290-79848d5bf3ea}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK EtherNetIPDeviceBase
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+	State AT%i* : UINT;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <LineIds Name="EtherNetIPDeviceBase">
+      <LineId Id="9" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

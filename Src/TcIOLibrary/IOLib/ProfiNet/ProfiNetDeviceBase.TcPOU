@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
+  <POU Name="ProfiNetDeviceBase" Id="{c9b78d03-7160-4d15-a463-d097735815ac}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK ProfiNetDeviceBase
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+	PnIoDeviceState AT%I* : UINT;
+	PnIoDeviceDiag AT%i* : uint;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <LineIds Name="ProfiNetDeviceBase">
+      <LineId Id="9" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

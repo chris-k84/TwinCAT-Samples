@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
+  <POU Name="ProfibusMaster" Id="{6bceab5d-de58-4a8b-aae3-198c30adc94d}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK ProfibusMaster
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+	Error AT%I* : USINT;
+	ActualModulo AT%I* : USINT;
+	DiagFlag AT%i* : BOOL;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <LineIds Name="ProfibusMaster">
+      <LineId Id="9" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

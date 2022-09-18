@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
+  <POU Name="ProfiNetMaster" Id="{1b53501a-4658-47c6-ac20-372be2f8e652}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK ProfiNetMaster
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+	DevState AT%I* : UINT;
+	PnIoError AT%I* : UINT;
+	PnIoDiag AT%i* : UINT;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <LineIds Name="ProfiNetMaster">
+      <LineId Id="9" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

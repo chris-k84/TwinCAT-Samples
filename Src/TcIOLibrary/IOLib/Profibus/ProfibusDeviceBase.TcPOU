@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
+  <POU Name="ProfibusDeviceBase" Id="{47c4ad1f-9b3f-4c9b-9734-d4706eb3885a}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK ProfibusDeviceBase
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+	DpState AT%I* : USINT;
+	ExtDiagFlag at%i* : BOOL;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <LineIds Name="ProfibusDeviceBase">
+      <LineId Id="9" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

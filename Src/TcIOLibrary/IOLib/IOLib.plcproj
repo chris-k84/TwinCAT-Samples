@@ -86,6 +86,12 @@
     <Compile Include="EtherCAT\Tasks\ITask.TcIO">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="EtherNetIP\EtherNetIPDeviceBase.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="EtherNetIP\EtherNetIPMaster.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Motion\RollerAxis\EP7402_0xxx_Channel.TcPOU">
       <SubType>Code</SubType>
     </Compile>
@@ -167,6 +173,18 @@
     <Compile Include="POUs\MAIN.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Profibus\ProfibusDeviceBase.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Profibus\ProfibusMaster.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ProfiNet\ProfiNetDeviceBase.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ProfiNet\ProfiNetMaster.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="DUTs" />
@@ -183,6 +201,9 @@
     <Folder Include="Motion\StepperAxis\Structs" />
     <Folder Include="EtherCAT" />
     <Folder Include="CAN" />
+    <Folder Include="EtherNetIP" />
+    <Folder Include="Profibus" />
+    <Folder Include="ProfiNet" />
     <Folder Include="VISUs" />
     <Folder Include="POUs" />
   </ItemGroup>
