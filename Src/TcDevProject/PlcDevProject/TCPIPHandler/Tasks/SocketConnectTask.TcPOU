@@ -107,6 +107,17 @@ END_IF
 ]]></ST>
       </Implementation>
     </Method>
+    <Property Name="RemoteSocket" Id="{fa38ac05-03cc-4c98-aef0-de370d43d756}">
+      <Declaration><![CDATA[PROPERTY PUBLIC RemoteSocket : T_HSOCKET]]></Declaration>
+      <Get Name="Get" Id="{f45f28ac-1b65-43bf-93ad-53fb7683bede}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[RemoteSocket := fbSocketConnect.hSocket;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
     <LineIds Name="SocketConnectTask">
       <LineId Id="11" Count="25" />
       <LineId Id="9" Count="0" />
@@ -129,6 +140,9 @@ END_IF
       <LineId Id="12" Count="1" />
       <LineId Id="11" Count="0" />
       <LineId Id="8" Count="0" />
+    </LineIds>
+    <LineIds Name="SocketConnectTask.RemoteSocket.Get">
+      <LineId Id="2" Count="0" />
     </LineIds>
   </POU>
 </TcPlcObject>
