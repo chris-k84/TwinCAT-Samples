@@ -1,0 +1,134 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="SocketConnectTask" Id="{ab0006a8-b1bb-4358-a532-fa52af7574ea}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK SocketConnectTask IMPLEMENTS ITask
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+	_execute : BOOL;
+	iState: INT;
+	_done: BOOL;
+	_busy: BOOL;
+	_error: BOOL;
+	fbSocketConnect : Tc2_TcpIp.FB_SocketConnect;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[CASE iState OF
+	0:
+		IF _execute THEN
+			_done := FALSE;
+			_busy := TRUE;
+			_error := FALSE;
+			fbSocketConnect.bExecute := TRUE;
+			IF fbSocketConnect.bBusy THEN
+				iState := 10;
+				_execute := false;
+			END_IF
+		END_IF
+	10:
+		IF NOT fbSocketConnect.bBusy THEN
+			IF NOT fbSocketConnect.bError THEN
+				_done := TRUE;
+			ELSE
+				_error := TRUE;
+			END_IF
+			_busy := FALSE;
+			fbSocketConnect.bExecute := FALSE;
+			iState := 0;
+		END_IF
+END_CASE
+
+fbSocketConnect(tTimeout := Tc2_System.DEFAULT_ADS_TIMEOUT)
+]]></ST>
+    </Implementation>
+    <Method Name="Abort" Id="{b89364ed-0e21-4695-98b8-99b272c7d5b2}">
+      <Declaration><![CDATA[METHOD Abort : BOOL
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[fbSocketConnect.bExecute := FALSE;
+_busy := FALSE;
+_execute := FALSE;
+Abort := TRUE;
+iState := 0;]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="Busy" Id="{9c61b440-f4b8-451f-acf6-41b39c2ee667}">
+      <Declaration><![CDATA[PROPERTY Busy : BOOL
+]]></Declaration>
+      <Get Name="Get" Id="{abe1cfa3-1c26-4855-8062-aee9127759c1}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Busy := _busy;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="Done" Id="{c06e83d7-12df-463f-9ef5-32ef1c8f9575}">
+      <Declaration><![CDATA[PROPERTY Done : BOOL
+]]></Declaration>
+      <Get Name="Get" Id="{fa927115-678b-4ec2-8cd6-829673d39909}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Done := _done;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="Error" Id="{7e829a65-c78e-43ac-9b91-7470cfd66cbd}">
+      <Declaration><![CDATA[PROPERTY Error : BOOL
+]]></Declaration>
+      <Get Name="Get" Id="{1f526684-2b40-4ae2-94ea-b3647a444046}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Error := _error;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Method Name="Execute" Id="{99fabac9-6396-449b-a6fb-a610ff7ef49b}">
+      <Declaration><![CDATA[METHOD Execute : BOOL
+VAR_INPUT
+	RemoteIPAddress : Tc2_System.T_IPv4Addr;
+	RemotePortNumber : UDINT;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF NOT fbSocketConnect.bBusy THEN
+	fbSocketConnect.sRemoteHost := RemoteIPAddress;
+	fbSocketConnect.nRemotePort := RemotePortNumber;	
+	Execute := _execute := TRUE;
+END_IF
+]]></ST>
+      </Implementation>
+    </Method>
+    <LineIds Name="SocketConnectTask">
+      <LineId Id="11" Count="25" />
+      <LineId Id="9" Count="0" />
+    </LineIds>
+    <LineIds Name="SocketConnectTask.Abort">
+      <LineId Id="5" Count="3" />
+      <LineId Id="4" Count="0" />
+    </LineIds>
+    <LineIds Name="SocketConnectTask.Busy.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="SocketConnectTask.Done.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="SocketConnectTask.Error.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="SocketConnectTask.Execute">
+      <LineId Id="9" Count="1" />
+      <LineId Id="12" Count="1" />
+      <LineId Id="11" Count="0" />
+      <LineId Id="8" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

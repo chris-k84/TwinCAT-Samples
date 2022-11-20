@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <Itf Name="ITask" Id="{c30402e0-3599-4862-bb6b-454152446820}">
+    <Declaration><![CDATA[INTERFACE ITask
+]]></Declaration>
+    <Method Name="Abort" Id="{80de65a5-defe-42ef-8f5d-8143dafab5d7}">
+      <Declaration><![CDATA[METHOD Abort : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+    </Method>
+    <Property Name="Busy" Id="{d320d1fd-45b2-4aad-ad9b-94759823337c}">
+      <Declaration><![CDATA[PROPERTY Busy : bool]]></Declaration>
+      <Get Name="Get" Id="{8ea5b166-32f2-412b-b338-ee8edca7ef40}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+    <Property Name="Done" Id="{9d22b659-8f04-42b3-8f6b-1e7f626a9631}">
+      <Declaration><![CDATA[PROPERTY Done : bool]]></Declaration>
+      <Get Name="Get" Id="{0f443cdb-2eef-4138-b1c9-b0ce7512d455}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+    <Property Name="Error" Id="{1aa21dfd-89ca-448a-9552-890b89b0aabf}">
+      <Declaration><![CDATA[PROPERTY Error : bool]]></Declaration>
+      <Get Name="Get" Id="{c5a78472-4a69-4cc5-bad2-f6a03405ae35}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+    <Method Name="Execute" Id="{f9395ce5-5c25-489e-824a-ba3e7eefa875}">
+      <Declaration><![CDATA[METHOD Execute : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+    </Method>
+  </Itf>
+</TcPlcObject>
