@@ -27,11 +27,5 @@ END_VAR
         <Declaration><![CDATA[]]></Declaration>
       </Get>
     </Property>
-    <Method Name="Execute" Id="{f9395ce5-5c25-489e-824a-ba3e7eefa875}">
-      <Declaration><![CDATA[METHOD Execute : BOOL
-VAR_INPUT
-END_VAR
-]]></Declaration>
-    </Method>
   </Itf>
 </TcPlcObject>

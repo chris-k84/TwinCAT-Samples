@@ -7,13 +7,132 @@ END_VAR
 VAR_OUTPUT
 END_VAR
 VAR
+	connectToServer : SocketConnectTask;
+	closeConectionToServer : SocketCloseTask;
+	getReceivedDataFromServer : SocketRecieveTask;
+	iState : INT;
+	_connect: BOOL;
+	_remoteIP : T_IPv4Addr;
+	_remotePort : UDINT;
+	_remoteHandle : Tc2_TcpIp.T_HSOCKET;
 END_VAR
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[]]></ST>
+      <ST><![CDATA[CASE iState OF
+	0: 
+		IF _connect THEN
+			iState := 10;
+		END_IF
+		
+	10:
+		IF connectToServer.Execute(RemoteIPAddress := _remoteIP, 
+									RemotePortNumber := _remotePort) THEN
+			iState := 20;
+		END_IF
+		
+	20:
+		_remoteHandle := connectToServer.RemoteSocket;
+		IF connectToServer.Done AND _remoteHandle.handle <> 0 THEN
+			iState := 30;
+		END_IF
+	
+	30:
+		IF getReceivedDataFromServer.Execute() THEN
+			iState := 40;
+		END_IF
+		
+	40:
+		IF getReceivedDataFromServer.Done THEN
+			iState := 30;
+		END_IF
+	
+	50:
+		IF closeConectionToServer.Execute(remoteSocket := _remoteHandle) THEN
+			iState := 60;
+		END_IF
+		
+	60:
+		IF closeConectionToServer.Done THEN
+			iState := 0;
+		END_IF
+		
+			
+END_CASE
+
+connectToServer();
+closeConectionToServer();
+getReceivedDataFromServer();]]></ST>
     </Implementation>
+    <Property Name="RemoteServerIP" Id="{71d05534-e3f9-431e-a916-9a11849cd730}">
+      <Declaration><![CDATA[PROPERTY PUBLIC RemoteServerIP : T_IPv4Addr]]></Declaration>
+      <Get Name="Get" Id="{ed5b35f5-8938-4a22-b10f-9fe33676c004}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[RemoteServerIP := _remoteIP;]]></ST>
+        </Implementation>
+      </Get>
+      <Set Name="Set" Id="{42094b82-ccda-4bfe-9e6a-91df50bb377b}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[_remoteIP := RemoteServerIP;]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
+    <Property Name="RemoteServerPort" Id="{f38399ff-a7cc-477b-a3d9-2a242f0fe26c}">
+      <Declaration><![CDATA[PROPERTY PUBLIC RemoteServerPort : udint]]></Declaration>
+      <Get Name="Get" Id="{0fbd444c-fffa-46d7-b665-e3ae9b72b4ca}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[RemoteServerPort := _remotePort;]]></ST>
+        </Implementation>
+      </Get>
+      <Set Name="Set" Id="{9f5ec062-55bf-4d37-ae87-9998f342cc59}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[_remotePort := RemoteServerPort;]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
     <LineIds Name="TCPIP_Base">
       <LineId Id="9" Count="0" />
+      <LineId Id="14" Count="0" />
+      <LineId Id="17" Count="2" />
+      <LineId Id="21" Count="1" />
+      <LineId Id="28" Count="0" />
+      <LineId Id="31" Count="0" />
+      <LineId Id="29" Count="1" />
+      <LineId Id="32" Count="1" />
+      <LineId Id="43" Count="0" />
+      <LineId Id="34" Count="0" />
+      <LineId Id="38" Count="2" />
+      <LineId Id="44" Count="1" />
+      <LineId Id="47" Count="16" />
+      <LineId Id="46" Count="0" />
+      <LineId Id="41" Count="0" />
+      <LineId Id="15" Count="0" />
+      <LineId Id="25" Count="0" />
+      <LineId Id="24" Count="0" />
+      <LineId Id="26" Count="1" />
+    </LineIds>
+    <LineIds Name="TCPIP_Base.RemoteServerIP.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="TCPIP_Base.RemoteServerIP.Set">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="TCPIP_Base.RemoteServerPort.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="TCPIP_Base.RemoteServerPort.Set">
+      <LineId Id="2" Count="0" />
     </LineIds>
   </POU>
 </TcPlcObject>

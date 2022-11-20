@@ -63,7 +63,7 @@ END_CASE
 
 fbSocketRecieve(pDest := ADR(rxBuffer),
 				cbLen := SIZEOF(rxBuffer),
-				tTimeout := Tc2_System.DEFAULT_ADS_TIMEOUT)]]></ST>
+				tTimeout := Tc2_System.DEFAULT_ADS_TIMEOUT);]]></ST>
     </Implementation>
     <Method Name="Abort" Id="{a044a30a-b11a-413c-8b14-9c8d4e7d5946}">
       <Declaration><![CDATA[METHOD Abort : BOOL
@@ -116,7 +116,9 @@ END_VAR
       <Declaration><![CDATA[METHOD Execute : BOOL
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[]]></ST>
+        <ST><![CDATA[IF NOT fbSocketRecieve.bBusy THEN
+	Execute := _execute := true;
+END_IF]]></ST>
       </Implementation>
     </Method>
     <Property Name="RemoteSocket" Id="{d466eac8-f162-41ed-a910-96a9c0dffcdb}">
@@ -167,6 +169,8 @@ END_VAR
       <LineId Id="2" Count="0" />
     </LineIds>
     <LineIds Name="SocketRecieveTask.Execute">
+      <LineId Id="5" Count="0" />
+      <LineId Id="8" Count="0" />
       <LineId Id="4" Count="0" />
     </LineIds>
     <LineIds Name="SocketRecieveTask.RemoteSocket.Get">

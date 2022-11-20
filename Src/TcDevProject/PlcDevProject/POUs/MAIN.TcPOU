@@ -3,6 +3,7 @@
   <POU Name="MAIN" Id="{82ccea0c-f4b1-4f8c-852a-ee292c7f124e}" SpecialFunc="None">
     <Declaration><![CDATA[PROGRAM MAIN
 VAR
+	fbtest : TCPIP_Base;
 END_VAR
 ]]></Declaration>
     <Implementation>

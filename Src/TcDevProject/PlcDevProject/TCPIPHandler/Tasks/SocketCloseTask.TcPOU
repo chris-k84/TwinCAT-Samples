@@ -41,7 +41,7 @@ END_VAR
 		END_IF
 END_CASE
 
-fbSocketClose(tTimeout := Tc2_System.DEFAULT_ADS_TIMEOUT)]]></ST>
+fbSocketClose(tTimeout := Tc2_System.DEFAULT_ADS_TIMEOUT);]]></ST>
     </Implementation>
     <Method Name="Abort" Id="{09f1e10d-086f-4235-926d-f2cdbbaf04f0}">
       <Declaration><![CDATA[METHOD Abort : BOOL
