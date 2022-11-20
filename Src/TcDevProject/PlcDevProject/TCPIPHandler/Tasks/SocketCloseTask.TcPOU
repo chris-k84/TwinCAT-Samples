@@ -55,8 +55,7 @@ iState := 0;]]></ST>
       </Implementation>
     </Method>
     <Property Name="Busy" Id="{2c8fc3eb-0742-4fd4-b731-d9fda5101f58}">
-      <Declaration><![CDATA[{warning 'add property implementation'}
-PROPERTY Busy : BOOL
+      <Declaration><![CDATA[PROPERTY Busy : BOOL
 ]]></Declaration>
       <Get Name="Get" Id="{68109c42-46f3-42d1-9147-11e36945c9a0}">
         <Declaration><![CDATA[VAR
@@ -68,8 +67,7 @@ END_VAR
       </Get>
     </Property>
     <Property Name="Done" Id="{69969dfe-8477-4829-ab98-bfe910f70fd6}">
-      <Declaration><![CDATA[{warning 'add property implementation'}
-PROPERTY Done : BOOL
+      <Declaration><![CDATA[PROPERTY Done : BOOL
 ]]></Declaration>
       <Get Name="Get" Id="{2bf8fb52-09e1-4e89-b6d0-b609d9bb904c}">
         <Declaration><![CDATA[VAR
@@ -81,8 +79,7 @@ END_VAR
       </Get>
     </Property>
     <Property Name="Error" Id="{5becaef0-3bec-4814-9b9e-28896f8768f5}">
-      <Declaration><![CDATA[{warning 'add property implementation'}
-PROPERTY Error : BOOL
+      <Declaration><![CDATA[PROPERTY Error : BOOL
 ]]></Declaration>
       <Get Name="Get" Id="{8139b64a-cc0c-450a-8371-bf91052ae75e}">
         <Declaration><![CDATA[VAR
