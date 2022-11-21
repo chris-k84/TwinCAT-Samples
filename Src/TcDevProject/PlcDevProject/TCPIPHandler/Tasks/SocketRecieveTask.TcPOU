@@ -14,9 +14,6 @@ VAR
 	_execute: BOOL;
 	fbSocketRecieve : Tc2_TcpIp.FB_SocketReceive;
 	rxBuffer : ARRAY[1..1440] OF BYTE;
-	cbReceived : UDINT;
-	nLenOfString : UDINT := 1;
-	bEndOfString: BOOL;
 	fbReceiveTimer : Tc2_Standard.TON;
 END_VAR
 ]]></Declaration>
@@ -27,8 +24,6 @@ END_VAR
 			_done := FALSE;
 			_busy := TRUE;
 			_error := FALSE;
-			nLenOfString := 1;(* Reset string length *)
-			bEndOfString := FALSE;
 			iState := 5;
 			_execute := FALSE;
 		END_IF
@@ -45,14 +40,6 @@ END_VAR
 		IF NOT fbSocketRecieve.bBusy THEN
 			IF NOT fbSocketRecieve.bError THEN
 				IF (fbSocketRecieve.nRecBytes > 0) THEN
-					cbReceived := cbReceived + fbSocketRecieve.nRecBytes;
-					REPEAT 
-						IF rxBuffer[nLenOfString] = 0 THEN(* String end delimiter found *)
-							bEndOfString := TRUE;
-						END_IF
-						nLenOfString := nLenOfString + 1;
-					UNTIL bEndOfString OR (nLenOfString >= cbReceived)
-					END_REPEAT
 					_busy := FALSE;
 					_done := TRUE;
 					iState := 0;
@@ -152,7 +139,6 @@ END_VAR
     </Property>
     <LineIds Name="SocketRecieveTask">
       <LineId Id="80" Count="5" />
-      <LineId Id="117" Count="1" />
       <LineId Id="90" Count="0" />
       <LineId Id="158" Count="0" />
       <LineId Id="91" Count="0" />
@@ -165,7 +151,7 @@ END_VAR
       <LineId Id="92" Count="0" />
       <LineId Id="148" Count="0" />
       <LineId Id="93" Count="1" />
-      <LineId Id="96" Count="8" />
+      <LineId Id="96" Count="0" />
       <LineId Id="123" Count="0" />
       <LineId Id="177" Count="0" />
       <LineId Id="122" Count="0" />
