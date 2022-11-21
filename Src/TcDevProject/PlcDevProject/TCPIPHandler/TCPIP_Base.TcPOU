@@ -15,12 +15,14 @@ VAR
 	_remoteIP : T_IPv4Addr;
 	_remotePort : UDINT;
 	_remoteHandle : Tc2_TcpIp.T_HSOCKET;
+	clearRecieve: BOOL;
 END_VAR
 ]]></Declaration>
     <Implementation>
       <ST><![CDATA[CASE iState OF
 	0: 
 		IF _connect THEN
+			_connect := false;
 			iState := 10;
 		END_IF
 		
@@ -32,8 +34,9 @@ END_VAR
 		
 	20:
 		_remoteHandle := connectToServer.RemoteSocket;
+		getReceivedDataFromServer.RemoteSocket := _remoteHandle;
 		IF connectToServer.Done AND _remoteHandle.handle <> 0 THEN
-			iState := 30;
+			iState := 21;
 		END_IF
 	
 	30:
@@ -43,7 +46,7 @@ END_VAR
 		
 	40:
 		IF getReceivedDataFromServer.Done THEN
-			iState := 30;
+			iState := 31;
 		END_IF
 	
 	50:
@@ -61,7 +64,12 @@ END_CASE
 
 connectToServer();
 closeConectionToServer();
-getReceivedDataFromServer();]]></ST>
+getReceivedDataFromServer();
+
+IF clearRecieve	THEN
+	clearRecieve := FALSE;
+	getReceivedDataFromServer.Abort();
+END_IF]]></ST>
     </Implementation>
     <Property Name="RemoteServerIP" Id="{71d05534-e3f9-431e-a916-9a11849cd730}">
       <Declaration><![CDATA[PROPERTY PUBLIC RemoteServerIP : T_IPv4Addr]]></Declaration>
@@ -104,13 +112,16 @@ END_VAR
     <LineIds Name="TCPIP_Base">
       <LineId Id="9" Count="0" />
       <LineId Id="14" Count="0" />
-      <LineId Id="17" Count="2" />
+      <LineId Id="17" Count="0" />
+      <LineId Id="86" Count="0" />
+      <LineId Id="18" Count="1" />
       <LineId Id="21" Count="1" />
       <LineId Id="28" Count="0" />
       <LineId Id="31" Count="0" />
       <LineId Id="29" Count="1" />
       <LineId Id="32" Count="1" />
       <LineId Id="43" Count="0" />
+      <LineId Id="79" Count="0" />
       <LineId Id="34" Count="0" />
       <LineId Id="38" Count="2" />
       <LineId Id="44" Count="1" />
@@ -121,6 +132,11 @@ END_VAR
       <LineId Id="25" Count="0" />
       <LineId Id="24" Count="0" />
       <LineId Id="26" Count="1" />
+      <LineId Id="81" Count="0" />
+      <LineId Id="80" Count="0" />
+      <LineId Id="82" Count="0" />
+      <LineId Id="85" Count="0" />
+      <LineId Id="83" Count="0" />
     </LineIds>
     <LineIds Name="TCPIP_Base.RemoteServerIP.Get">
       <LineId Id="2" Count="0" />

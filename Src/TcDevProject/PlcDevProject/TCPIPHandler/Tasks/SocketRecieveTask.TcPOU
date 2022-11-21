@@ -15,8 +15,9 @@ VAR
 	fbSocketRecieve : Tc2_TcpIp.FB_SocketReceive;
 	rxBuffer : ARRAY[1..1440] OF BYTE;
 	cbReceived : UDINT;
-	nLenOfString	: UDINT;
+	nLenOfString : UDINT := 1;
 	bEndOfString: BOOL;
+	fbReceiveTimer : Tc2_Standard.TON;
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -26,18 +27,23 @@ END_VAR
 			_done := FALSE;
 			_busy := TRUE;
 			_error := FALSE;
-			fbSocketRecieve.bExecute := TRUE;
-			nLenOfString := 0;(* Reset string length *)
+			nLenOfString := 1;(* Reset string length *)
 			bEndOfString := FALSE;
-			IF fbSocketRecieve.bBusy THEN
-				iState := 10;
-				_execute := false;
-			END_IF
+			iState := 5;
+			_execute := FALSE;
+		END_IF
+		
+	5:	
+		fbReceiveTimer.IN := TRUE;
+		fbSocketRecieve.bExecute := TRUE;
+		IF fbReceiveTimer.Q THEN
+			iState := 10;
+			fbReceiveTimer.IN := FALSE;
 		END_IF
 	10:
+		fbSocketRecieve.bExecute := FALSE;
 		IF NOT fbSocketRecieve.bBusy THEN
 			IF NOT fbSocketRecieve.bError THEN
-				_done := TRUE;
 				IF (fbSocketRecieve.nRecBytes > 0) THEN
 					cbReceived := cbReceived + fbSocketRecieve.nRecBytes;
 					REPEAT 
@@ -48,8 +54,10 @@ END_VAR
 					UNTIL bEndOfString OR (nLenOfString >= cbReceived)
 					END_REPEAT
 					_busy := FALSE;
-					fbSocketRecieve.bExecute := FALSE;
+					_done := TRUE;
 					iState := 0;
+				ELSE
+					iState := 5;
 				END_IF
 			ELSE
 				_error := TRUE;
@@ -60,7 +68,7 @@ END_VAR
 			
 		END_IF
 END_CASE
-
+fbReceiveTimer(PT := T#100MS);
 fbSocketRecieve(pDest := ADR(rxBuffer),
 				cbLen := SIZEOF(rxBuffer),
 				tTimeout := Tc2_System.DEFAULT_ADS_TIMEOUT);]]></ST>
@@ -143,11 +151,25 @@ END_VAR
       </Set>
     </Property>
     <LineIds Name="SocketRecieveTask">
-      <LineId Id="80" Count="6" />
+      <LineId Id="80" Count="5" />
       <LineId Id="117" Count="1" />
-      <LineId Id="87" Count="17" />
-      <LineId Id="123" Count="1" />
+      <LineId Id="90" Count="0" />
+      <LineId Id="158" Count="0" />
+      <LineId Id="91" Count="0" />
+      <LineId Id="149" Count="1" />
+      <LineId Id="152" Count="0" />
+      <LineId Id="151" Count="0" />
+      <LineId Id="154" Count="1" />
+      <LineId Id="157" Count="0" />
+      <LineId Id="153" Count="0" />
+      <LineId Id="92" Count="0" />
+      <LineId Id="148" Count="0" />
+      <LineId Id="93" Count="1" />
+      <LineId Id="96" Count="8" />
+      <LineId Id="123" Count="0" />
+      <LineId Id="177" Count="0" />
       <LineId Id="122" Count="0" />
+      <LineId Id="142" Count="1" />
       <LineId Id="105" Count="2" />
       <LineId Id="120" Count="1" />
       <LineId Id="119" Count="0" />
