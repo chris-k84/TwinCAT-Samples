@@ -1,0 +1,43 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <Itf Name="ITF_TcpIpBase" Id="{3296eb75-0456-4ff7-8177-81c867e312a0}">
+    <Declaration><![CDATA[INTERFACE ITF_TcpIpBase
+]]></Declaration>
+    <Method Name="ConnectToRobot" Id="{707298fc-88d9-4a17-8de1-6328d16390ed}">
+      <Declaration><![CDATA[METHOD ConnectToRobot : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="DisconnectFromRobot" Id="{d5d6905b-3ad6-4dcf-bcfd-e114b3f7bb54}">
+      <Declaration><![CDATA[METHOD DisconnectFromRobot : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="GetData" Id="{de1299f0-55dd-48cb-84cf-720cfe2e4c46}">
+      <Declaration><![CDATA[METHOD GetData : ARRAY[0..1439] OF byte
+VAR_INPUT
+END_VAR
+]]></Declaration>
+    </Method>
+    <Property Name="RemoteServerIP" Id="{05b47376-6d41-4061-9fed-0b977bc3b91e}">
+      <Declaration><![CDATA[PROPERTY RemoteServerIP : T_IPv4Addr]]></Declaration>
+      <Get Name="Get" Id="{24852d7d-cb9d-4181-840a-cd42a92ed2c8}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+      <Set Name="Set" Id="{6a181587-ae2f-492a-909a-2884ed55908d}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Set>
+    </Property>
+    <Property Name="RemoteServerPort" Id="{08c70f2a-2c0b-497a-86ae-d6a8baeb9823}">
+      <Declaration><![CDATA[PROPERTY RemoteServerPort : UDINT]]></Declaration>
+      <Get Name="Get" Id="{45f24a6b-c477-4cb9-8049-dd42b57f6314}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+      <Set Name="Set" Id="{08c7ddf9-2ec1-4812-a63e-92cb95b6c651}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Set>
+    </Property>
+  </Itf>
+</TcPlcObject>

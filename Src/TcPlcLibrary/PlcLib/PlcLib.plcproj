@@ -59,6 +59,9 @@
     <Compile Include="POUs\MAIN.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="TCPIPHandler\ITF_TcpIpBase.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="TCPIPHandler\Tasks\ITask.TcIO">
       <SubType>Code</SubType>
     </Compile>

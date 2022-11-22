@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
   <POU Name="TCPIP_Base" Id="{65da1431-803c-4746-bb7f-22bf27a0e177}" SpecialFunc="None">
-    <Declaration><![CDATA[FUNCTION_BLOCK TCPIP_Base
+    <Declaration><![CDATA[FUNCTION_BLOCK TCPIP_Base IMPLEMENTS ITF_TcpIpBase
 VAR_INPUT
 END_VAR
 VAR_OUTPUT
