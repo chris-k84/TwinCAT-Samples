@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
-  <POU Name="TCPIP_Base" Id="{c12d86ef-055b-43b4-be43-8e1aa454c4be}" SpecialFunc="None">
+  <POU Name="TCPIP_Base" Id="{65da1431-803c-4746-bb7f-22bf27a0e177}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK TCPIP_Base
 VAR_INPUT
 END_VAR
@@ -73,7 +73,7 @@ connectToServer();
 closeConectionToServer();
 getReceivedDataFromServer();]]></ST>
     </Implementation>
-    <Method Name="ConnectToRobot" Id="{7fdcc8ae-a489-4d24-bc39-9edbb54156ec}">
+    <Method Name="ConnectToRobot" Id="{0e802047-5a08-436c-8d42-86478532b47e}">
       <Declaration><![CDATA[METHOD ConnectToRobot : BOOL
 VAR_INPUT
 END_VAR
@@ -82,7 +82,7 @@ END_VAR
         <ST><![CDATA[ConnectToRobot := _connect := true;]]></ST>
       </Implementation>
     </Method>
-    <Method Name="DisconnectFromRobot" Id="{a119b9c1-e6f5-4d3d-82d9-faa466d74979}">
+    <Method Name="DisconnectFromRobot" Id="{6491f002-ea1e-4b9f-8dee-8bcb7cc1dea4}">
       <Declaration><![CDATA[METHOD DisconnectFromRobot : BOOL
 VAR_INPUT
 END_VAR
@@ -91,7 +91,7 @@ END_VAR
         <ST><![CDATA[DisconnectFromRobot := _disconnect := true;]]></ST>
       </Implementation>
     </Method>
-    <Method Name="GetData" Id="{c410b5d6-710e-4806-8307-1c4cdc1466b5}">
+    <Method Name="GetData" Id="{8cdab55b-3cfc-400c-b81e-4f087af29019}">
       <Declaration><![CDATA[METHOD PUBLIC GetData : ARRAY[0..1439] OF byte
 VAR_INPUT
 END_VAR
@@ -100,9 +100,9 @@ END_VAR
         <ST><![CDATA[GetData := getReceivedDataFromServer.rxBuffer;]]></ST>
       </Implementation>
     </Method>
-    <Property Name="RemoteServerIP" Id="{71d05534-e3f9-431e-a916-9a11849cd730}">
+    <Property Name="RemoteServerIP" Id="{c712af6f-cb00-48f5-a7f0-31ace650ed71}">
       <Declaration><![CDATA[PROPERTY PUBLIC RemoteServerIP : T_IPv4Addr]]></Declaration>
-      <Get Name="Get" Id="{ed5b35f5-8938-4a22-b10f-9fe33676c004}">
+      <Get Name="Get" Id="{2869d66b-9724-44d0-b781-254c975a5157}">
         <Declaration><![CDATA[VAR
 END_VAR
 ]]></Declaration>
@@ -110,7 +110,7 @@ END_VAR
           <ST><![CDATA[RemoteServerIP := _remoteIP;]]></ST>
         </Implementation>
       </Get>
-      <Set Name="Set" Id="{42094b82-ccda-4bfe-9e6a-91df50bb377b}">
+      <Set Name="Set" Id="{afc45aa6-07cd-4ce8-bee8-975fe3a8c50d}">
         <Declaration><![CDATA[VAR
 END_VAR
 ]]></Declaration>
@@ -119,9 +119,9 @@ END_VAR
         </Implementation>
       </Set>
     </Property>
-    <Property Name="RemoteServerPort" Id="{f38399ff-a7cc-477b-a3d9-2a242f0fe26c}">
+    <Property Name="RemoteServerPort" Id="{2499f905-4fde-4178-984c-0ea485973f73}">
       <Declaration><![CDATA[PROPERTY PUBLIC RemoteServerPort : udint]]></Declaration>
-      <Get Name="Get" Id="{0fbd444c-fffa-46d7-b665-e3ae9b72b4ca}">
+      <Get Name="Get" Id="{20744aaa-48ec-4835-a6ac-d9a791159548}">
         <Declaration><![CDATA[VAR
 END_VAR
 ]]></Declaration>
@@ -129,7 +129,7 @@ END_VAR
           <ST><![CDATA[RemoteServerPort := _remotePort;]]></ST>
         </Implementation>
       </Get>
-      <Set Name="Set" Id="{9f5ec062-55bf-4d37-ae87-9998f342cc59}">
+      <Set Name="Set" Id="{a7ef5c8d-1f8f-4dab-82bc-c617e0cd9f5c}">
         <Declaration><![CDATA[VAR
 END_VAR
 ]]></Declaration>

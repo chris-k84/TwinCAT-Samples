@@ -3,11 +3,10 @@
   <POU Name="MAIN" Id="{82ccea0c-f4b1-4f8c-852a-ee292c7f124e}" SpecialFunc="None">
     <Declaration><![CDATA[PROGRAM MAIN
 VAR
-	fbtest : TCPIP_Base := (RemoteServerIP := '192.168.5.1',RemoteServerPort := 30004);
 END_VAR
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[fbtest();]]></ST>
+      <ST><![CDATA[]]></ST>
     </Implementation>
     <LineIds Name="MAIN">
       <LineId Id="2" Count="0" />

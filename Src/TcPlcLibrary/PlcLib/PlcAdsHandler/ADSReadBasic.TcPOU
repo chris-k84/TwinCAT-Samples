@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
   <POU Name="ADSReadBasic" Id="{0ffe9e63-1be4-478e-95e1-bcfdc1358ff7}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK ADSReadBasic
 VAR_INPUT

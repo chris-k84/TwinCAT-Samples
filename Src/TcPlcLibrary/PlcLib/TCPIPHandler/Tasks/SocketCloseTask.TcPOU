@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
-  <POU Name="SocketCloseTask" Id="{a9ec101e-14e7-48c3-bce3-b5c9494e4a85}" SpecialFunc="None">
+  <POU Name="SocketCloseTask" Id="{b758f076-b4b6-4aed-b4cc-76c480154da9}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK SocketCloseTask IMPLEMENTS ITask
 VAR_INPUT
 END_VAR
@@ -43,7 +43,7 @@ END_CASE
 
 fbSocketClose(tTimeout := Tc2_System.DEFAULT_ADS_TIMEOUT);]]></ST>
     </Implementation>
-    <Method Name="Abort" Id="{09f1e10d-086f-4235-926d-f2cdbbaf04f0}">
+    <Method Name="Abort" Id="{0280487d-8d40-4124-9b5a-4ab0c2d5229a}">
       <Declaration><![CDATA[METHOD Abort : BOOL
 ]]></Declaration>
       <Implementation>
@@ -54,10 +54,10 @@ Abort := TRUE;
 iState := 0;]]></ST>
       </Implementation>
     </Method>
-    <Property Name="Busy" Id="{2c8fc3eb-0742-4fd4-b731-d9fda5101f58}">
+    <Property Name="Busy" Id="{9e067868-23f3-4344-9bf4-28da06f4e6d8}">
       <Declaration><![CDATA[PROPERTY Busy : BOOL
 ]]></Declaration>
-      <Get Name="Get" Id="{68109c42-46f3-42d1-9147-11e36945c9a0}">
+      <Get Name="Get" Id="{6a81979f-085f-4f67-98c7-ab1e79b50908}">
         <Declaration><![CDATA[VAR
 END_VAR
 ]]></Declaration>
@@ -66,10 +66,10 @@ END_VAR
         </Implementation>
       </Get>
     </Property>
-    <Property Name="Done" Id="{69969dfe-8477-4829-ab98-bfe910f70fd6}">
+    <Property Name="Done" Id="{baaf2f3e-6293-4e1b-9368-6abb6077d9fd}">
       <Declaration><![CDATA[PROPERTY Done : BOOL
 ]]></Declaration>
-      <Get Name="Get" Id="{2bf8fb52-09e1-4e89-b6d0-b609d9bb904c}">
+      <Get Name="Get" Id="{a3df42b6-8745-4970-a959-d06eab66fd27}">
         <Declaration><![CDATA[VAR
 END_VAR
 ]]></Declaration>
@@ -78,10 +78,10 @@ END_VAR
         </Implementation>
       </Get>
     </Property>
-    <Property Name="Error" Id="{5becaef0-3bec-4814-9b9e-28896f8768f5}">
+    <Property Name="Error" Id="{db3d067b-99bf-418b-a540-9b68044ce1bc}">
       <Declaration><![CDATA[PROPERTY Error : BOOL
 ]]></Declaration>
-      <Get Name="Get" Id="{8139b64a-cc0c-450a-8371-bf91052ae75e}">
+      <Get Name="Get" Id="{08e4f122-f975-4222-bd52-43f531125026}">
         <Declaration><![CDATA[VAR
 END_VAR
 ]]></Declaration>
@@ -90,7 +90,7 @@ END_VAR
         </Implementation>
       </Get>
     </Property>
-    <Method Name="Execute" Id="{c07f1c06-cab0-49da-abd0-2e88e239d7e3}">
+    <Method Name="Execute" Id="{d139ffe0-469c-42c2-9b8d-91ab943470cb}">
       <Declaration><![CDATA[METHOD Execute : BOOL
 VAR_INPUT
 	remoteSocket: T_HSOCKET;

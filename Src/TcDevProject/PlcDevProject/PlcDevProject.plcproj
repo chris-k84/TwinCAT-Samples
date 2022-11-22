@@ -24,27 +24,10 @@
     <Compile Include="POUs\MAIN.TcPOU">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="TCPIPHandler\Tasks\ITask.TcIO">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="TCPIPHandler\Tasks\SocketCloseTask.TcPOU">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="TCPIPHandler\Tasks\SocketConnectTask.TcPOU">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="TCPIPHandler\Tasks\SocketRecieveTask.TcPOU">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="TCPIPHandler\TCPIP_Base.TcPOU">
-      <SubType>Code</SubType>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="DUTs" />
     <Folder Include="GVLs" />
-    <Folder Include="TCPIPHandler" />
-    <Folder Include="TCPIPHandler\Tasks" />
     <Folder Include="VISUs" />
     <Folder Include="POUs" />
   </ItemGroup>
