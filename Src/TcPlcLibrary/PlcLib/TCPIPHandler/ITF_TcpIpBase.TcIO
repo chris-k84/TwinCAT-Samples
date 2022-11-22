@@ -21,6 +21,12 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
     </Method>
+    <Method Name="IsConnected" Id="{a6a954aa-7686-480c-8068-e405edc58a52}">
+      <Declaration><![CDATA[METHOD IsConnected : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+    </Method>
     <Property Name="RemoteServerIP" Id="{05b47376-6d41-4061-9fed-0b977bc3b91e}">
       <Declaration><![CDATA[PROPERTY RemoteServerIP : T_IPv4Addr]]></Declaration>
       <Get Name="Get" Id="{24852d7d-cb9d-4181-840a-cd42a92ed2c8}">
