@@ -5,6 +5,7 @@
 VAR_INPUT
 END_VAR
 VAR_OUTPUT
+	rxBuffer : ARRAY[0..1439] OF BYTE;
 END_VAR
 VAR
 	iState: INT;
@@ -13,7 +14,7 @@ VAR
 	_error: BOOL;
 	_execute: BOOL;
 	fbSocketRecieve : Tc2_TcpIp.FB_SocketReceive;
-	rxBuffer : ARRAY[1..1440] OF BYTE;
+	
 	fbReceiveTimer : Tc2_Standard.TON;
 END_VAR
 ]]></Declaration>

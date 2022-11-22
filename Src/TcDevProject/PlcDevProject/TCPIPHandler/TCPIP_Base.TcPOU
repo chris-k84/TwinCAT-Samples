@@ -16,6 +16,7 @@ VAR
 	_remotePort : UDINT;
 	_remoteHandle : Tc2_TcpIp.T_HSOCKET;
 	clearRecieve: BOOL;
+	_disconnect: BOOL;
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -36,7 +37,7 @@ END_VAR
 		_remoteHandle := connectToServer.RemoteSocket;
 		getReceivedDataFromServer.RemoteSocket := _remoteHandle;
 		IF connectToServer.Done AND _remoteHandle.handle <> 0 THEN
-			iState := 21;
+			iState := 30;
 		END_IF
 	
 	30:
@@ -46,7 +47,13 @@ END_VAR
 		
 	40:
 		IF getReceivedDataFromServer.Done THEN
-			iState := 31;
+			IF _disconnect THEN
+				_disconnect := FALSE;
+				iState := 50;
+			ELSE
+				iState := 30;
+			END_IF
+			
 		END_IF
 	
 	50:
@@ -64,13 +71,35 @@ END_CASE
 
 connectToServer();
 closeConectionToServer();
-getReceivedDataFromServer();
-
-IF clearRecieve	THEN
-	clearRecieve := FALSE;
-	getReceivedDataFromServer.Abort();
-END_IF]]></ST>
+getReceivedDataFromServer();]]></ST>
     </Implementation>
+    <Method Name="ConnectToRobot" Id="{7fdcc8ae-a489-4d24-bc39-9edbb54156ec}">
+      <Declaration><![CDATA[METHOD ConnectToRobot : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[ConnectToRobot := _connect := true;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="DisconnectFromRobot" Id="{a119b9c1-e6f5-4d3d-82d9-faa466d74979}">
+      <Declaration><![CDATA[METHOD DisconnectFromRobot : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[DisconnectFromRobot := _disconnect := true;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="GetData" Id="{c410b5d6-710e-4806-8307-1c4cdc1466b5}">
+      <Declaration><![CDATA[METHOD PUBLIC GetData : ARRAY[0..1439] OF byte
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[GetData := getReceivedDataFromServer.rxBuffer;]]></ST>
+      </Implementation>
+    </Method>
     <Property Name="RemoteServerIP" Id="{71d05534-e3f9-431e-a916-9a11849cd730}">
       <Declaration><![CDATA[PROPERTY PUBLIC RemoteServerIP : T_IPv4Addr]]></Declaration>
       <Get Name="Get" Id="{ed5b35f5-8938-4a22-b10f-9fe33676c004}">
@@ -125,18 +154,28 @@ END_VAR
       <LineId Id="34" Count="0" />
       <LineId Id="38" Count="2" />
       <LineId Id="44" Count="1" />
-      <LineId Id="47" Count="16" />
+      <LineId Id="47" Count="4" />
+      <LineId Id="103" Count="0" />
+      <LineId Id="109" Count="0" />
+      <LineId Id="104" Count="0" />
+      <LineId Id="107" Count="1" />
+      <LineId Id="105" Count="0" />
+      <LineId Id="52" Count="11" />
       <LineId Id="46" Count="0" />
       <LineId Id="41" Count="0" />
       <LineId Id="15" Count="0" />
       <LineId Id="25" Count="0" />
       <LineId Id="24" Count="0" />
       <LineId Id="26" Count="1" />
-      <LineId Id="81" Count="0" />
-      <LineId Id="80" Count="0" />
-      <LineId Id="82" Count="0" />
-      <LineId Id="85" Count="0" />
-      <LineId Id="83" Count="0" />
+    </LineIds>
+    <LineIds Name="TCPIP_Base.ConnectToRobot">
+      <LineId Id="5" Count="0" />
+    </LineIds>
+    <LineIds Name="TCPIP_Base.DisconnectFromRobot">
+      <LineId Id="5" Count="0" />
+    </LineIds>
+    <LineIds Name="TCPIP_Base.GetData">
+      <LineId Id="5" Count="0" />
     </LineIds>
     <LineIds Name="TCPIP_Base.RemoteServerIP.Get">
       <LineId Id="2" Count="0" />

@@ -7,14 +7,10 @@ VAR
 END_VAR
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[fbtest();
-
-]]></ST>
+      <ST><![CDATA[fbtest();]]></ST>
     </Implementation>
     <LineIds Name="MAIN">
       <LineId Id="2" Count="0" />
-      <LineId Id="17" Count="0" />
-      <LineId Id="16" Count="0" />
     </LineIds>
   </POU>
 </TcPlcObject>
