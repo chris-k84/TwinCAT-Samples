@@ -74,6 +74,9 @@
     <Compile Include="TCPIPHandler\Tasks\SocketRecieveTask.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="TCPIPHandler\Tasks\SocketSendTask.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="TCPIPHandler\TCPIP_Base.TcPOU">
       <SubType>Code</SubType>
     </Compile>
@@ -97,9 +100,17 @@
       <DefaultResolution>Tc2_System, * (Beckhoff Automation GmbH)</DefaultResolution>
       <Namespace>Tc2_System</Namespace>
     </PlaceholderReference>
+    <PlaceholderReference Include="Tc2_TcpIp">
+      <DefaultResolution>Tc2_TcpIp, * (Beckhoff Automation GmbH)</DefaultResolution>
+      <Namespace>Tc2_TcpIp</Namespace>
+    </PlaceholderReference>
     <PlaceholderReference Include="Tc3_DynamicMemory">
       <DefaultResolution>Tc3_DynamicMemory, * (Beckhoff Automation GmbH)</DefaultResolution>
       <Namespace>Tc3_DynamicMemory</Namespace>
+    </PlaceholderReference>
+    <PlaceholderReference Include="Tc3_EventLogger">
+      <DefaultResolution>Tc3_EventLogger, * (Beckhoff Automation GmbH)</DefaultResolution>
+      <Namespace>Tc3_EventLogger</Namespace>
     </PlaceholderReference>
     <PlaceholderReference Include="Tc3_Module">
       <DefaultResolution>Tc3_Module, * (Beckhoff Automation GmbH)</DefaultResolution>

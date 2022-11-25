@@ -1,0 +1,159 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="SocketSendTask" Id="{4f030919-0a98-4351-809a-94c4dc20c30b}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK SocketSendTask IMPLEMENTS ITask
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+	iState: INT;
+	_done: BOOL;
+	_busy: BOOL;
+	_error: BOOL;
+	_execute : BOOL;
+	fbSocketSend : Tc2_TcpIp.FB_SocketSend;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[CASE iState OF
+	0:
+		IF _execute THEN
+			_done := FALSE;
+			_busy := TRUE;
+			_error := FALSE;
+			fbSocketSend.bExecute := TRUE;
+			IF fbSocketSend.bBusy THEN
+				iState := 10;
+				_execute := false;
+			END_IF
+		END_IF
+	10:
+		IF NOT fbSocketSend.bBusy THEN
+			IF NOT fbSocketSend.bError THEN
+				_done := TRUE;
+			ELSE
+				_error := TRUE;
+			END_IF
+			_busy := FALSE;
+			fbSocketSend.bExecute := FALSE;
+			iState := 0;
+		END_IF
+END_CASE
+
+fbSocketSend(tTimeout := Tc2_System.DEFAULT_ADS_TIMEOUT);]]></ST>
+    </Implementation>
+    <Method Name="Abort" Id="{e0715338-7996-4356-a55e-29c43a6231d4}">
+      <Declaration><![CDATA[METHOD Abort : BOOL
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[fbSocketSend.bExecute := FALSE;
+_busy := FALSE;
+_execute := FALSE;
+Abort := TRUE;
+iState := 0;]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="Busy" Id="{a6ad668d-5d57-4e2c-9179-e8b3b99d79df}">
+      <Declaration><![CDATA[PROPERTY Busy : BOOL
+]]></Declaration>
+      <Get Name="Get" Id="{5fc82b9b-c42a-4a3f-98c0-ff24bdbf3ac5}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Busy := _busy;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="Done" Id="{84c25007-6a09-4d8f-b82a-218e94d68125}">
+      <Declaration><![CDATA[PROPERTY Done : BOOL
+]]></Declaration>
+      <Get Name="Get" Id="{31fa1c99-2564-4453-b380-e92595d80254}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Done := _done;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="Error" Id="{fbe17f00-50f6-488a-b5d5-2280f458be8e}">
+      <Declaration><![CDATA[PROPERTY Error : BOOL
+]]></Declaration>
+      <Get Name="Get" Id="{cf7c4b69-35a1-443a-8485-9866aa03d9cf}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Error := _error;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Method Name="Execute" Id="{f48cef18-e120-4f1a-be71-36cbb216941d}">
+      <Declaration><![CDATA[METHOD Execute : BOOL
+VAR_INPUT
+	DataToSend : POINTER TO BYTE;
+	DataLength : UDINT;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF NOT fbSocketSend.bBusy THEN
+	fbSocketSend.pSrc := DataToSend;
+	fbSocketSend.cbLen := DataLength;
+	Execute := _execute := true;
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="RemoteSocket" Id="{05fdfbd5-8764-4c89-b7bf-7538d3011211}">
+      <Declaration><![CDATA[PROPERTY PUBLIC RemoteSocket : T_HSOCKET]]></Declaration>
+      <Get Name="Get" Id="{1c47167f-0203-460b-b516-2c1b20440c76}">
+        <Declaration><![CDATA[PUBLIC
+VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[RemoteSocket := fbSocketSend.hSocket;]]></ST>
+        </Implementation>
+      </Get>
+      <Set Name="Set" Id="{64cb43d3-5066-4c29-8a83-7e712b3da039}">
+        <Declaration><![CDATA[PUBLIC 
+VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[fbSocketSend.hSocket := RemoteSocket;]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
+    <LineIds Name="SocketSendTask">
+      <LineId Id="54" Count="24" />
+      <LineId Id="9" Count="0" />
+    </LineIds>
+    <LineIds Name="SocketSendTask.Abort">
+      <LineId Id="5" Count="3" />
+      <LineId Id="4" Count="0" />
+    </LineIds>
+    <LineIds Name="SocketSendTask.Busy.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="SocketSendTask.Done.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="SocketSendTask.Error.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="SocketSendTask.Execute">
+      <LineId Id="5" Count="0" />
+      <LineId Id="14" Count="1" />
+      <LineId Id="8" Count="0" />
+      <LineId Id="4" Count="0" />
+    </LineIds>
+    <LineIds Name="SocketSendTask.RemoteSocket.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="SocketSendTask.RemoteSocket.Set">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

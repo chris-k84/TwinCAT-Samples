@@ -10,6 +10,7 @@ VAR
 	connectToServer : SocketConnectTask;
 	closeConectionToServer : SocketCloseTask;
 	getReceivedDataFromServer : SocketRecieveTask;
+	sendDataToServer : SocketSendTask;
 	iState : INT;
 	_connect: BOOL;
 	_remoteIP : T_IPv4Addr;
@@ -74,7 +75,8 @@ END_CASE
 
 connectToServer();
 closeConectionToServer();
-getReceivedDataFromServer();]]></ST>
+getReceivedDataFromServer();
+sendDataToServer();]]></ST>
     </Implementation>
     <Method Name="ConnectToRobot" Id="{0e802047-5a08-436c-8d42-86478532b47e}">
       <Declaration><![CDATA[METHOD ConnectToRobot : BOOL
@@ -183,6 +185,7 @@ END_VAR
       <LineId Id="25" Count="0" />
       <LineId Id="24" Count="0" />
       <LineId Id="26" Count="1" />
+      <LineId Id="133" Count="0" />
     </LineIds>
     <LineIds Name="TCPIP_Base.ConnectToRobot">
       <LineId Id="5" Count="0" />
