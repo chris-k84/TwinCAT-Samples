@@ -152,6 +152,20 @@ END_VAR
         </Implementation>
       </Set>
     </Property>
+    <Method Name="SendData" Id="{85133274-a835-48df-b771-f43f5112779a}">
+      <Declaration><![CDATA[METHOD PUBLIC SendData : BOOL
+VAR_INPUT
+	Data : POINTER TO BYTE;
+	DataLength : UDINT;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF NOT sendDataToServer.Busy THEN
+	sendDataToServer.Execute(DataToSend := Data, DataLength := DataLength);
+	SendData := TRUE;
+END_IF]]></ST>
+      </Implementation>
+    </Method>
     <LineIds Name="TCPIP_Base">
       <LineId Id="9" Count="0" />
       <LineId Id="14" Count="0" />
@@ -210,6 +224,12 @@ END_VAR
     </LineIds>
     <LineIds Name="TCPIP_Base.RemoteServerPort.Set">
       <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="TCPIP_Base.SendData">
+      <LineId Id="5" Count="0" />
+      <LineId Id="8" Count="0" />
+      <LineId Id="10" Count="0" />
+      <LineId Id="9" Count="0" />
     </LineIds>
   </POU>
 </TcPlcObject>
