@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
-  <POU Name="SocketRecieveTask" Id="{e15ca270-1c0a-48bd-83a0-101e82ff50ce}" SpecialFunc="None">
+  <POU Name="SocketRecieveTask" Id="{7200e675-f53b-417d-a1b2-2cfc8d54d428}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK SocketRecieveTask IMPLEMENTS ITask
 VAR_INPUT
 END_VAR
@@ -61,7 +61,7 @@ fbSocketRecieve(pDest := ADR(rxBuffer),
 				cbLen := SIZEOF(rxBuffer),
 				tTimeout := Tc2_System.DEFAULT_ADS_TIMEOUT);]]></ST>
     </Implementation>
-    <Method Name="Abort" Id="{c73408db-da2b-404e-8fa3-3d61894ae1a3}">
+    <Method Name="Abort" Id="{b251e579-b9b2-4472-aff9-fe0d1a2038d6}">
       <Declaration><![CDATA[METHOD Abort : BOOL
 ]]></Declaration>
       <Implementation>
@@ -72,10 +72,10 @@ Abort := TRUE;
 iState := 0;]]></ST>
       </Implementation>
     </Method>
-    <Property Name="Busy" Id="{dba5f978-5ec6-4ff4-9c27-f3474ca48bc3}">
+    <Property Name="Busy" Id="{8bcc1356-5262-49cc-b40c-3f5babe3b8fd}">
       <Declaration><![CDATA[PROPERTY Busy : BOOL
 ]]></Declaration>
-      <Get Name="Get" Id="{c1260c39-6a85-4ccc-a013-642999cf6c71}">
+      <Get Name="Get" Id="{44379ed3-5395-47d7-ab55-a30c07d3cac1}">
         <Declaration><![CDATA[VAR
 END_VAR
 ]]></Declaration>
@@ -84,10 +84,10 @@ END_VAR
         </Implementation>
       </Get>
     </Property>
-    <Property Name="Done" Id="{b2a0b8c3-3507-4e85-9295-1f62288504d6}">
+    <Property Name="Done" Id="{42e3dc66-2ff4-4ea5-9fdb-22b335b7b927}">
       <Declaration><![CDATA[PROPERTY Done : BOOL
 ]]></Declaration>
-      <Get Name="Get" Id="{e1f2c216-7440-4bac-b40b-0240942d2cd5}">
+      <Get Name="Get" Id="{0eb6ff16-9f23-493c-8f61-c896a8c9e79e}">
         <Declaration><![CDATA[VAR
 END_VAR
 ]]></Declaration>
@@ -96,10 +96,10 @@ END_VAR
         </Implementation>
       </Get>
     </Property>
-    <Property Name="Error" Id="{2a95e621-93aa-4241-8d57-8085e6017400}">
+    <Property Name="Error" Id="{04b25469-35ab-4746-acc0-55e292f8e105}">
       <Declaration><![CDATA[PROPERTY Error : BOOL
 ]]></Declaration>
-      <Get Name="Get" Id="{23764fb3-8e61-43c0-a8c5-6d1c5a4cff34}">
+      <Get Name="Get" Id="{b489fb35-4a45-4f04-8166-d7b2e053af7d}">
         <Declaration><![CDATA[VAR
 END_VAR
 ]]></Declaration>
@@ -108,7 +108,7 @@ END_VAR
         </Implementation>
       </Get>
     </Property>
-    <Method Name="Execute" Id="{0552173e-02fe-4343-8acd-3a31e9bcf1e5}">
+    <Method Name="Execute" Id="{31c00328-3618-41cd-8006-cfbcfd519ca2}">
       <Declaration><![CDATA[METHOD Execute : BOOL
 ]]></Declaration>
       <Implementation>
@@ -117,9 +117,9 @@ END_VAR
 END_IF]]></ST>
       </Implementation>
     </Method>
-    <Property Name="RemoteSocket" Id="{20bfcffa-39ed-4ef5-88bc-7beef535c9f6}">
+    <Property Name="RemoteSocket" Id="{4e9494b2-4b2d-4b9c-b382-a0dc28556782}">
       <Declaration><![CDATA[PROPERTY PUBLIC RemoteSocket : T_HSOCKET]]></Declaration>
-      <Get Name="Get" Id="{51a9adc8-0e16-4e31-b92b-2feac3dcef53}">
+      <Get Name="Get" Id="{7b2136a8-5479-409e-af75-d8dd02ac150a}">
         <Declaration><![CDATA[PUBLIC
 VAR
 END_VAR
@@ -128,7 +128,7 @@ END_VAR
           <ST><![CDATA[RemoteSocket := fbSocketRecieve.hSocket;]]></ST>
         </Implementation>
       </Get>
-      <Set Name="Set" Id="{f5d4dfeb-b5ea-49a8-bd39-f798943c2dbe}">
+      <Set Name="Set" Id="{2fd17a94-d102-4b2f-81b9-238c7a542b5f}">
         <Declaration><![CDATA[PUBLIC 
 VAR
 END_VAR

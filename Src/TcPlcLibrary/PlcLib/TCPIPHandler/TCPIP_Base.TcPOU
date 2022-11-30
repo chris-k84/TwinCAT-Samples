@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
-  <POU Name="TCPIP_Base" Id="{65da1431-803c-4746-bb7f-22bf27a0e177}" SpecialFunc="None">
+  <POU Name="TCPIP_Base" Id="{a983e921-9540-4a9d-85ba-979e8f0d48df}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK TCPIP_Base IMPLEMENTS ITF_TcpIpBase
 VAR_INPUT
 END_VAR
@@ -19,6 +19,7 @@ VAR
 	clearRecieve: BOOL;
 	_disconnect: BOOL;
 	_connected: BOOL;
+
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -38,15 +39,19 @@ END_VAR
 	20:
 		_remoteHandle := connectToServer.RemoteSocket;
 		getReceivedDataFromServer.RemoteSocket := _remoteHandle;
+		sendDataToServer.RemoteSocket := _remoteHandle;
 		IF connectToServer.Done AND _remoteHandle.handle <> 0 THEN
-			iState := 30;
+			iState := 21;
 			_connected := TRUE;
 		END_IF
+	21: //IDLE
 	
 	30:
-		IF getReceivedDataFromServer.Execute() THEN
-			iState := 40;
-		END_IF
+			IF getReceivedDataFromServer.Execute() THEN
+				iState := 40;
+			END_IF
+
+	
 		
 	40:
 		IF getReceivedDataFromServer.Done THEN
@@ -78,7 +83,7 @@ closeConectionToServer();
 getReceivedDataFromServer();
 sendDataToServer();]]></ST>
     </Implementation>
-    <Method Name="ConnectToRobot" Id="{0e802047-5a08-436c-8d42-86478532b47e}">
+    <Method Name="ConnectToRobot" Id="{46f55014-7f93-437b-8a34-2e7ce35b5e4b}">
       <Declaration><![CDATA[METHOD ConnectToRobot : BOOL
 VAR_INPUT
 END_VAR
@@ -87,7 +92,7 @@ END_VAR
         <ST><![CDATA[ConnectToRobot := _connect := true;]]></ST>
       </Implementation>
     </Method>
-    <Method Name="DisconnectFromRobot" Id="{6491f002-ea1e-4b9f-8dee-8bcb7cc1dea4}">
+    <Method Name="DisconnectFromRobot" Id="{9436ce89-09d2-40fb-abb9-15819e6bbdeb}">
       <Declaration><![CDATA[METHOD DisconnectFromRobot : BOOL
 VAR_INPUT
 END_VAR
@@ -96,7 +101,7 @@ END_VAR
         <ST><![CDATA[DisconnectFromRobot := _disconnect := true;]]></ST>
       </Implementation>
     </Method>
-    <Method Name="GetData" Id="{8cdab55b-3cfc-400c-b81e-4f087af29019}">
+    <Method Name="GetData" Id="{7dd741f8-add2-403a-8ca0-7c210ac7bde8}">
       <Declaration><![CDATA[METHOD PUBLIC GetData : ARRAY[0..1439] OF byte
 VAR_INPUT
 END_VAR
@@ -105,7 +110,7 @@ END_VAR
         <ST><![CDATA[GetData := getReceivedDataFromServer.rxBuffer;]]></ST>
       </Implementation>
     </Method>
-    <Method Name="IsConnected" Id="{d4afbbff-19b5-479d-8d61-a567ab11d390}">
+    <Method Name="IsConnected" Id="{00caec45-f633-4ce6-8c38-91ea65a046c2}">
       <Declaration><![CDATA[METHOD PUBLIC IsConnected : BOOL
 VAR_INPUT
 END_VAR
@@ -114,9 +119,18 @@ END_VAR
         <ST><![CDATA[IsConnected := _connected;]]></ST>
       </Implementation>
     </Method>
-    <Property Name="RemoteServerIP" Id="{c712af6f-cb00-48f5-a7f0-31ace650ed71}">
+    <Method Name="RecieveData" Id="{db1671fd-0189-46da-8318-e55508aedfcf}">
+      <Declaration><![CDATA[METHOD RecieveData : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[iState := 30;]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="RemoteServerIP" Id="{2faf95ab-8efc-4833-83bb-0b12572f24c6}">
       <Declaration><![CDATA[PROPERTY PUBLIC RemoteServerIP : T_IPv4Addr]]></Declaration>
-      <Get Name="Get" Id="{2869d66b-9724-44d0-b781-254c975a5157}">
+      <Get Name="Get" Id="{fea4c331-8d30-43e3-baf4-3de45921ae30}">
         <Declaration><![CDATA[VAR
 END_VAR
 ]]></Declaration>
@@ -124,7 +138,7 @@ END_VAR
           <ST><![CDATA[RemoteServerIP := _remoteIP;]]></ST>
         </Implementation>
       </Get>
-      <Set Name="Set" Id="{afc45aa6-07cd-4ce8-bee8-975fe3a8c50d}">
+      <Set Name="Set" Id="{1d9266f5-eee5-408b-99f5-a5215e1370f4}">
         <Declaration><![CDATA[VAR
 END_VAR
 ]]></Declaration>
@@ -133,9 +147,9 @@ END_VAR
         </Implementation>
       </Set>
     </Property>
-    <Property Name="RemoteServerPort" Id="{2499f905-4fde-4178-984c-0ea485973f73}">
+    <Property Name="RemoteServerPort" Id="{5fdc3243-f206-4f80-96a7-3a91ae158e29}">
       <Declaration><![CDATA[PROPERTY PUBLIC RemoteServerPort : udint]]></Declaration>
-      <Get Name="Get" Id="{20744aaa-48ec-4835-a6ac-d9a791159548}">
+      <Get Name="Get" Id="{c3923109-f2e1-4950-8236-7c77e516d2af}">
         <Declaration><![CDATA[VAR
 END_VAR
 ]]></Declaration>
@@ -143,7 +157,7 @@ END_VAR
           <ST><![CDATA[RemoteServerPort := _remotePort;]]></ST>
         </Implementation>
       </Get>
-      <Set Name="Set" Id="{a7ef5c8d-1f8f-4dab-82bc-c617e0cd9f5c}">
+      <Set Name="Set" Id="{ce2d9bdd-b2c1-4c3c-8d1a-6c551432d225}">
         <Declaration><![CDATA[VAR
 END_VAR
 ]]></Declaration>
@@ -152,7 +166,7 @@ END_VAR
         </Implementation>
       </Set>
     </Property>
-    <Method Name="SendData" Id="{85133274-a835-48df-b771-f43f5112779a}">
+    <Method Name="SendData" Id="{b06540b4-8f36-4cd2-91bf-f9e37ba22eba}">
       <Declaration><![CDATA[METHOD PUBLIC SendData : BOOL
 VAR_INPUT
 	Data : POINTER TO BYTE;
@@ -179,18 +193,18 @@ END_IF]]></ST>
       <LineId Id="32" Count="1" />
       <LineId Id="43" Count="0" />
       <LineId Id="79" Count="0" />
+      <LineId Id="153" Count="0" />
       <LineId Id="34" Count="0" />
       <LineId Id="38" Count="0" />
       <LineId Id="111" Count="0" />
-      <LineId Id="39" Count="1" />
-      <LineId Id="44" Count="1" />
-      <LineId Id="47" Count="4" />
-      <LineId Id="103" Count="0" />
-      <LineId Id="109" Count="0" />
-      <LineId Id="104" Count="0" />
-      <LineId Id="107" Count="1" />
-      <LineId Id="105" Count="0" />
-      <LineId Id="52" Count="10" />
+      <LineId Id="39" Count="0" />
+      <LineId Id="194" Count="0" />
+      <LineId Id="40" Count="0" />
+      <LineId Id="174" Count="0" />
+      <LineId Id="192" Count="1" />
+      <LineId Id="189" Count="1" />
+      <LineId Id="177" Count="10" />
+      <LineId Id="53" Count="9" />
       <LineId Id="113" Count="0" />
       <LineId Id="63" Count="0" />
       <LineId Id="46" Count="0" />
@@ -211,6 +225,9 @@ END_IF]]></ST>
       <LineId Id="5" Count="0" />
     </LineIds>
     <LineIds Name="TCPIP_Base.IsConnected">
+      <LineId Id="5" Count="0" />
+    </LineIds>
+    <LineIds Name="TCPIP_Base.RecieveData">
       <LineId Id="5" Count="0" />
     </LineIds>
     <LineIds Name="TCPIP_Base.RemoteServerIP.Get">
