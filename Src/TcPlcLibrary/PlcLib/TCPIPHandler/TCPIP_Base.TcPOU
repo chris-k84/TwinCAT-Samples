@@ -11,33 +11,33 @@ VAR
 	closeConectionToServer : SocketCloseTask;
 	getReceivedDataFromServer : SocketRecieveTask;
 	sendDataToServer : SocketSendTask;
-	iState : INT;
+	iConnectionState : INT;
+	iReceiveState : INT;
+	iSendState : INT;
 	_connect: BOOL;
 	_remoteIP : T_IPv4Addr;
 	_remotePort : UDINT;
 	_remoteHandle : Tc2_TcpIp.T_HSOCKET;
-	clearRecieve: BOOL;
 	_disconnect: BOOL;
 	_connected: BOOL;
-
 END_VAR
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[CASE iState OF
+      <ST><![CDATA[CASE iConnectionState OF
 	0: 
 		IF _connect THEN
 			_connect := false;
-			iState := 10;
+			iConnectionState := 10;
 		END_IF
 		IF _disconnect THEN
 			_disconnect := FALSE;
-			iState := 50;
+			iConnectionState := 30;
 		END_IF
 		
 	10:
 		IF connectToServer.Execute(RemoteIPAddress := _remoteIP, 
 									RemotePortNumber := _remotePort) THEN
-			iState := 20;
+			iConnectionState := 20;
 		END_IF
 		
 	20:
@@ -45,18 +45,18 @@ END_VAR
 		getReceivedDataFromServer.RemoteSocket := _remoteHandle;
 		sendDataToServer.RemoteSocket := _remoteHandle;
 		IF connectToServer.Done AND _remoteHandle.handle <> 0 THEN
-			iState := 0;
+			iConnectionState := 0;
 			_connected := TRUE;
 		END_IF
 	
-	50:
+	30:
 		IF closeConectionToServer.Execute(remoteSocket := _remoteHandle) THEN
-			iState := 60;
+			iConnectionState := 40;
 		END_IF
 		
-	60:
+	40:
 		IF closeConectionToServer.Done THEN
-			iState := 0;
+			iConnectionState := 0;
 			_connected := FALSE;
 		END_IF
 END_CASE
@@ -108,20 +108,17 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[30:
-	IF NOT _disconnect THEN
+        <ST><![CDATA[CASE iReceiveState OF
+	0:
 		IF getReceivedDataFromServer.Execute() THEN
-			iState := 40;
+			iReceiveState := 10;
 		END_IF
-	ELSE
-		iState := 50;
-	END_IF
-	
-40:
-	IF getReceivedDataFromServer.Done THEN
-		iState := 30;			
-	END_IF
-	]]></ST>
+		
+	10:
+		IF getReceivedDataFromServer.Done THEN
+			iReceiveState := 0;			
+		END_IF
+END_CASE	]]></ST>
       </Implementation>
     </Method>
     <Property Name="RemoteServerIP" Id="{2faf95ab-8efc-4833-83bb-0b12572f24c6}">
@@ -170,38 +167,27 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[20:
-	IF NOT sendDataToServer.Busy THEN
-		sendDataToServer.Execute(DataToSend := Data, DataLength := DataLength);
-		SendData := TRUE;
-	END_IF
-
-30:
-	IF NOT _disconnect THEN
-		IF getReceivedDataFromServer.Execute() THEN
-			iState := 40;
+        <ST><![CDATA[CASE iSendState OF	
+	0:
+		IF NOT sendDataToServer.Busy THEN
+			sendDataToServer.Execute(DataToSend := Data, DataLength := DataLength);
+			iSendState := 10;
 		END_IF
-	ELSE
-		iState := 50;
-	END_IF
 	
-40:
-	IF getReceivedDataFromServer.Done THEN
-		iState := 30;			
-	END_IF]]></ST>
+	10:
+		IF getReceivedDataFromServer.Execute() THEN
+			iSendState := 20;
+		END_IF
+		
+	20:
+		IF getReceivedDataFromServer.Done THEN
+			iSendState := 0;			
+		END_IF
+END_CASE]]></ST>
       </Implementation>
     </Method>
     <LineIds Name="TCPIP_Base">
-      <LineId Id="223" Count="5" />
-      <LineId Id="270" Count="1" />
-      <LineId Id="273" Count="0" />
-      <LineId Id="272" Count="0" />
-      <LineId Id="229" Count="15" />
-      <LineId Id="259" Count="9" />
-      <LineId Id="222" Count="0" />
-      <LineId Id="269" Count="0" />
-      <LineId Id="24" Count="0" />
-      <LineId Id="26" Count="1" />
+      <LineId Id="316" Count="40" />
       <LineId Id="133" Count="0" />
     </LineIds>
     <LineIds Name="TCPIP_Base.ConnectToRobot">
@@ -217,7 +203,10 @@ END_VAR
       <LineId Id="5" Count="0" />
     </LineIds>
     <LineIds Name="TCPIP_Base.RecieveData">
-      <LineId Id="11" Count="12" />
+      <LineId Id="27" Count="0" />
+      <LineId Id="11" Count="0" />
+      <LineId Id="13" Count="2" />
+      <LineId Id="19" Count="4" />
       <LineId Id="9" Count="0" />
     </LineIds>
     <LineIds Name="TCPIP_Base.RemoteServerIP.Get">
@@ -233,13 +222,18 @@ END_VAR
       <LineId Id="2" Count="0" />
     </LineIds>
     <LineIds Name="TCPIP_Base.SendData">
+      <LineId Id="36" Count="0" />
       <LineId Id="5" Count="0" />
       <LineId Id="30" Count="0" />
       <LineId Id="8" Count="0" />
       <LineId Id="10" Count="0" />
       <LineId Id="9" Count="0" />
-      <LineId Id="17" Count="12" />
+      <LineId Id="17" Count="2" />
+      <LineId Id="21" Count="1" />
+      <LineId Id="40" Count="0" />
+      <LineId Id="27" Count="2" />
       <LineId Id="16" Count="0" />
+      <LineId Id="39" Count="0" />
     </LineIds>
   </POU>
 </TcPlcObject>
